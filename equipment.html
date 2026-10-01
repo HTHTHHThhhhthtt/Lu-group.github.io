@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="实验室仪器展示">
+  <title>实验室仪器 | Research Group</title>
+  <link rel="stylesheet" href="./assets/css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="hero-strip">
+      <div class="hero-inner">
+        <!-- 图片替换：assets/images/logo.png -->
+        <img class="site-logo" src="./assets/images/logo.png" alt="课题组 Logo">
+        <div class="site-title-wrap">
+          <!-- 文字替换：课题组名称 -->
+          <p class="site-title">课题组名称 / Research Group Name</p>
+          <p class="site-subtitle">University · School / Department · Laboratory</p>
+        </div>
+      </div>
+    </div>
+    <nav class="main-nav" aria-label="主导航">
+      <div class="nav-inner">
+        <a class="nav-link " href="./index.html">Publications</a>
+        <a class="nav-link " href="./advisor.html">导师简介</a>
+        <a class="nav-link " href="./members.html">课题组成员</a>
+        <a class="nav-link " href="./patents.html">专利成果</a>
+        <a class="nav-link " href="./news.html">课题组新闻</a>
+        <a class="nav-link active" href="./equipment.html">实验室仪器</a>
+      </div>
+    </nav>
+  </header>
+  <main class="page-shell">
+    <section class="page-heading">
+      <h1>实验室仪器 / Equipment</h1>
+      <p>点击仪器图片可放大查看原图。复制 equipment-card 即可新增仪器。</p>
+    </section>
+
+    <section class="equipment-grid">
+      <article class="equipment-card card">
+        <button class="equipment-image-button" type="button" data-enlarge aria-label="放大查看仪器 1 图片">
+          <!-- 图片替换：assets/images/equipment/equipment-01.jpg -->
+          <img class="equipment-image" src="./assets/images/equipment/equipment-01.jpg" alt="仪器 1 图片占位">
+        </button>
+        <div class="equipment-content">
+          <h2>仪器名称 1</h2>
+          <p><strong>主要功能：</strong>填写仪器的核心功能。</p>
+          <p><strong>参数简介：</strong></p>
+          <ul class="equipment-specs">
+            <li>参数 A：……</li>
+            <li>参数 B：……</li>
+            <li>参数 C：……</li>
+          </ul>
+          <p><strong>应用场景：</strong>填写该设备主要用于哪些实验、测试或制备环节。</p>
+        </div>
+      </article>
+
+      <article class="equipment-card card">
+        <button class="equipment-image-button" type="button" data-enlarge aria-label="放大查看仪器 2 图片">
+          <img class="equipment-image" src="./assets/images/equipment/equipment-02.jpg" alt="仪器 2 图片占位">
+        </button>
+        <div class="equipment-content">
+          <h2>仪器名称 2</h2>
+          <p><strong>主要功能：</strong>填写仪器的核心功能。</p>
+          <p><strong>参数简介：</strong></p>
+          <ul class="equipment-specs">
+            <li>参数 A：……</li>
+            <li>参数 B：……</li>
+          </ul>
+          <p><strong>应用场景：</strong>填写应用场景。</p>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <!-- 图片放大弹窗：无需修改 -->
+  <div id="imageModal" class="image-modal" aria-hidden="true" role="dialog" aria-label="图片放大预览">
+    <button class="image-modal-close" type="button" aria-label="关闭">×</button>
+    <img class="image-modal-content" src="" alt="">
+  </div>
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <!-- 文字替换：单位、地址、联系方式 -->
+      © <span data-current-year></span> Research Group Name. All rights reserved. · 地址/邮箱可在此处填写
+    </div>
+  </footer>
+  <script src="./assets/js/main.js"></script>
+</body>
+</html>
