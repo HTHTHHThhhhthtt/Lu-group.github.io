@@ -77,7 +77,7 @@ a:focus {
 }
 
 /* 顶部横幅 —— 普通页面：一条深蓝横条，只放校徽和课题组名称。
-   主页那条带照片的横幅见下面 .hero-strip--home。 */
+   主页那条带照片的横幅见下面 .hero-strip--landing。 */
 .hero-strip {
   position: relative;
   height: var(--hero-bar-height);
@@ -86,9 +86,10 @@ a:focus {
   background-color: #003366; /* 深蓝横条的颜色 */
 }
 
-/* 主页专用：高的照片横幅（配合 index.html 里的 class="hero-strip hero-strip--home"）。
+/* 主页 index.html 专用：高的照片横幅（index.html 里写的是
+   class="hero-strip hero-strip--landing"，那个 --landing 就是开关）。
    照片由 main.js 生成轨道后左右滑动，见下面的 .hero-photos。 */
-.hero-strip--home {
+.hero-strip--landing {
   height: var(--hero-height);
   /* 横幅底图：assets/images/backend-01.jpg。
      平时看到的其实是下面 .hero-photos 那条轨道在左右滑动，
@@ -109,7 +110,7 @@ a:focus {
 /* 压暗层：盖在照片上面，保证白色 Logo 和课题组名称看得清。
    只在最上面那一截偏暗，往下很快淡到看不见，所以不会有明显的“渐变带”。
    想让顶部更深就把第一个数调大，想更淡就调小（四个数一起收放）。 */
-.hero-strip--home::after {
+.hero-strip--landing::after {
   content: "";
   position: absolute;
   inset: 0;
@@ -329,7 +330,7 @@ a:focus {
 
 /* 主页的内容区：内容暂时还没填，先留出一屏高度，
    免得页脚紧贴在导航条下面像页面坏了。以后内容多了自然会顶开。 */
-.page-shell--home {
+.page-shell--landing {
   min-height: 52vh;
 }
 

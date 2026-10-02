@@ -14,7 +14,7 @@
   });
 
   // 主页横幅的照片轮播：照片左右滑动切换（backend-01 / 02 / 03 依次出现）。
-  // 只在主页（HTML 里带 class="hero-strip--home" 的那个横幅）才会播放，
+  // 只在主页 index.html（横幅上带 class="hero-strip--landing"）才会播放，
   // 其它页面顶部是一条纯深蓝横条，不加载这些照片。
   // 换照片 / 增减张数：只改这个数组（按顺序播放，路径相对站点根目录）。
   var BANNER_PHOTOS = [
@@ -25,7 +25,7 @@
   var BANNER_STEP_MS = 8000;   // 每张照片停留多久（毫秒）：8000 = 8 秒
   var BANNER_SLIDE_MS = 1200;  // 滑动切换用多久（毫秒）：1200 = 1.2 秒
 
-  var heroStrip = document.querySelector(".hero-strip--home");
+  var heroStrip = document.querySelector(".hero-strip--landing");
   if (heroStrip && BANNER_PHOTOS.length > 1) {
     var heroTrack = document.createElement("div");
     heroTrack.className = "hero-photos";
@@ -240,18 +240,19 @@
   var LEAVE_FALLBACK_MS = 700; // 万一没收到动画结束事件，兜底也跳过去
   var reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  // 主页是哪一页：认导航里带 data-nav-home 的那个链接的 href
+  // 站点入口是哪一页：认导航里带 data-nav-entry 的那个链接的 href
+  // （现在就是 index.html，也就是主页；这样写是为了改文件名时不用动这里）
   // （主页现在就叫 index.html，也就是站点入口；这条逻辑只认链接，改名也不怕）
-  var homeLink = document.querySelector("[data-nav-home]");
-  var homeFile = homeLink ? homeLink.getAttribute("href") || "" : "";
-  var currentIsHome = !!document.querySelector(".hero-strip--home");
+  var entryLink = document.querySelector("[data-nav-entry]");
+  var entryFile = entryLink ? entryLink.getAttribute("href") || "" : "";
+  var currentIsEntry = !!document.querySelector(".hero-strip--landing");
 
   // 只看文件名，忽略 "./"、"../" 和 #、? 后面的部分，方便比对
   var toFileName = function (path) {
     var part = String(path || "").split("#")[0].split("?")[0].split("/").pop();
     return part || "index.html";
   };
-  homeFile = toFileName(homeFile);
+  entryFile = toFileName(entryFile);
   var currentFile = toFileName(window.location.pathname);
 
   var remember = function (value) {
@@ -285,11 +286,11 @@
       return;
     }
 
-    var destIsHome = toFileName(href) === homeFile;
+    var destIsEntry = toFileName(href) === entryFile;
     var direction = "";
-    if (currentIsHome && !destIsHome) {
+    if (currentIsEntry && !destIsEntry) {
       direction = "up";
-    } else if (!currentIsHome && destIsHome) {
+    } else if (!currentIsEntry && destIsEntry) {
       direction = "down";
     }
 

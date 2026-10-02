@@ -24,6 +24,7 @@ research-group-github-pages/
    └─ images/
       ├─ header-bg.jpg        # 顶部横幅
       ├─ logo.png             # Logo
+      ├─ journals/            # 主页期刊封面
       ├─ publications/        # 论文图文摘要
       ├─ advisor/             # 导师照片
       ├─ members/             # 成员照片
