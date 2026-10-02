@@ -6,6 +6,20 @@
   <meta name="description" content="课题组新闻列表">
   <title>课题组新闻 | Research Group</title>
   <link rel="stylesheet" href="./assets/css/style.css">
+  <!-- 翻页动画的“接棒”脚本：上一页在 sessionStorage 里留了 up / down，
+       这里赶在页面画出来之前把类加到 <html> 上，新页面才能接着滑进来。
+       没有留值（直接打开网址、刷新、从别的站过来）就不播进场动画。
+       规则见 assets/js/main.js 和 style.css 的「页面切换动画」一段。 -->
+  <script>
+    (function () {
+      var dir = null;
+      try { dir = sessionStorage.getItem("pageTransition"); } catch (e) {}
+      if (dir === "up" || dir === "down") {
+        document.documentElement.classList.add("enter-" + dir);
+      }
+      try { sessionStorage.removeItem("pageTransition"); } catch (e) {}
+    })();
+  </script>
 </head>
 <body>
   <header class="site-header">
@@ -15,41 +29,101 @@
         <img class="site-logo" src="./assets/images/logo.png" alt="课题组 Logo">
         <div class="site-title-wrap">
           <!-- 文字替换：课题组名称 -->
-          <p class="site-title">课题组名称 / Research Group Name</p>
-          <p class="site-subtitle">University · School / Department · Laboratory</p>
+          <p class="site-title">卢普顺课题组 / Pushun Lu Group</p>
+          <p class="site-subtitle">Xiamen University / College of Physical Science and Technology</p>
         </div>
       </div>
     </div>
     <nav class="main-nav" aria-label="主导航">
       <div class="nav-inner">
-        <a class="nav-link " href="./index.html">Publications</a>
-        <a class="nav-link " href="./advisor.html">导师简介</a>
-        <a class="nav-link " href="./members.html">课题组成员</a>
-        <a class="nav-link " href="./patents.html">专利成果</a>
-        <a class="nav-link active" href="./news.html">课题组新闻</a>
-        <a class="nav-link " href="./equipment.html">实验室仪器</a>
+        <a class="nav-link " data-nav-home href="./home.html"><span class="nav-link-text">主页</span><span class="nav-link-en">Home</span></a>
+        <a class="nav-link " href="./index.html"><span class="nav-link-text">论文成果</span><span class="nav-link-en">Publications</span></a>
+        <a class="nav-link " href="./advisor.html"><span class="nav-link-text">导师简介</span><span class="nav-link-en">Principal Investigator</span></a>
+        <a class="nav-link " href="./members.html"><span class="nav-link-text">课题组成员</span><span class="nav-link-en">Members</span></a>
+        <a class="nav-link " href="./patents.html"><span class="nav-link-text">专利成果</span><span class="nav-link-en">Patents</span></a>
+        <a class="nav-link active" href="./news.html"><span class="nav-link-text">课题组新闻</span><span class="nav-link-en">News</span></a>
+        <a class="nav-link " href="./equipment.html"><span class="nav-link-text">实验室仪器</span><span class="nav-link-en">Facilities</span></a>
       </div>
     </nav>
   </header>
   <main class="page-shell">
     <section class="page-heading">
       <h1>课题组新闻 / News</h1>
-      <p>新闻按时间倒序。每条新闻可跳转到独立详情页。</p>
     </section>
 
     <section class="news-list">
+      <!-- 每条新闻一个 article，按时间从新到旧往下排。
+           “某某加入课题组”这种消息的写法就是下面这样：
+             标题 = 某某加入课题组
+             日期 = 年-月-日（只影响显示，排序要自己往上/往下挪）
+             正文 = X年X月X日，某某加入了课题组
+             标题 = 链接到这一条的详情页（页面在 news-日期-拼音.html）
+           以后有新成员入组：复制一条改成新人的名字和日期、挪到正确位置，
+           再复制 news-detail.html 存成 news-新日期-拼音.html 填上内容，
+           最后把列表里的链接指过去。 -->
       <article class="news-item">
-        <!-- 链接替换：新增新闻时，可复制 news-detail.html 为 news-002.html 等 -->
-        <h2 class="news-title"><a href="./news-detail.html">[新闻标题占位] 课题组某项研究取得新进展</a></h2>
-        <div class="news-date">2026-XX-XX</div>
-        <p class="news-lead">[新闻导语占位] 用 1–3 句话概括新闻内容，点击标题进入详情页。</p>
+        <h2 class="news-title"><a href="./news-20260901-linshuangquan.html">林双权加入课题组</a></h2>
+        <div class="news-date">2026-09-01</div>
+        <p class="news-lead">2026年9月1日，林双权加入了课题组。</p>
       </article>
 
       <article class="news-item">
-        <h2 class="news-title"><a href="./news-detail.html">[新闻标题占位] 课题组参加某学术会议</a></h2>
-        <div class="news-date">2025-XX-XX</div>
-        <p class="news-lead">[新闻导语占位] 可填写会议、获奖、访问、项目启动、学生活动等新闻。</p>
+        <h2 class="news-title"><a href="./news-20260901-dongxiaoyi.html">董小亿加入课题组</a></h2>
+        <div class="news-date">2026-09-01</div>
+        <p class="news-lead">2026年9月1日，董小亿加入了课题组。</p>
       </article>
+
+      <article class="news-item">
+        <h2 class="news-title"><a href="./news-20260901-zhangna.html">张娜加入课题组</a></h2>
+        <div class="news-date">2026-09-01</div>
+        <p class="news-lead">2026年9月1日，张娜加入了课题组。</p>
+      </article>
+
+      <article class="news-item">
+        <h2 class="news-title"><a href="./news-20260629-chentianhao.html">陈昊天加入课题组</a></h2>
+        <div class="news-date">2026-06-29</div>
+        <p class="news-lead">2026年6月29日，陈昊天加入了课题组。</p>
+      </article>
+
+      <article class="news-item">
+        <h2 class="news-title"><a href="./news-20250901-liuyan.html">刘炎加入课题组</a></h2>
+        <div class="news-date">2025-09-01</div>
+        <p class="news-lead">2025年9月1日，刘炎加入了课题组。</p>
+      </article>
+
+      <article class="news-item">
+        <h2 class="news-title"><a href="./news-20250901-zhangdan.html">张丹加入课题组</a></h2>
+        <div class="news-date">2025-09-01</div>
+        <p class="news-lead">2025年9月1日，张丹加入了课题组。</p>
+      </article>
+
+      <article class="news-item">
+        <h2 class="news-title"><a href="./news-20250901-zhangniu.html">张妞加入课题组</a></h2>
+        <div class="news-date">2025-08-30</div>
+        <p class="news-lead">2025年8月30日，张妞加入了课题组。</p>
+      </article>
+
+      <article class="news-item">
+        <h2 class="news-title"><a href="./news-20250901-zhangyi.html">张溢加入课题组</a></h2>
+        <div class="news-date">2025-09-01</div>
+        <p class="news-lead">2025年9月1日，张溢加入了课题组。</p>
+      </article>
+
+      <article class="news-item">
+        <h2 class="news-title"><a href="./news-20200901-lanchaofei.html">兰超飞加入课题组</a></h2>
+        <div class="news-date">2020-09-01</div>
+        <p class="news-lead">2020年9月1日，兰超飞加入了课题组。</p>
+      </article>
+
+      <!-- ===== 下面是新闻模板（原来那两条占位示例，已注释掉，不会显示）。
+                 要发别的类型的新闻时，把这段解开复制一条出来照着填；
+                 有独立详情页的话，标题写成 <a href="./news-002.html">标题</a>。
+      <article class="news-item">
+        <h2 class="news-title"><a href="#">[新闻标题]</a></h2>
+        <div class="news-date">2026-XX-XX</div>
+        <p class="news-lead">[新闻导语] 用 1–3 句话概括，点标题进详情页。</p>
+      </article>
+      ===== -->
     </section>
   </main>
   <footer class="site-footer">

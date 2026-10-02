@@ -6,6 +6,20 @@
   <meta name="description" content="实验室仪器展示">
   <title>实验室仪器 | Research Group</title>
   <link rel="stylesheet" href="./assets/css/style.css">
+  <!-- 翻页动画的“接棒”脚本：上一页在 sessionStorage 里留了 up / down，
+       这里赶在页面画出来之前把类加到 <html> 上，新页面才能接着滑进来。
+       没有留值（直接打开网址、刷新、从别的站过来）就不播进场动画。
+       规则见 assets/js/main.js 和 style.css 的「页面切换动画」一段。 -->
+  <script>
+    (function () {
+      var dir = null;
+      try { dir = sessionStorage.getItem("pageTransition"); } catch (e) {}
+      if (dir === "up" || dir === "down") {
+        document.documentElement.classList.add("enter-" + dir);
+      }
+      try { sessionStorage.removeItem("pageTransition"); } catch (e) {}
+    })();
+  </script>
 </head>
 <body>
   <header class="site-header">
@@ -15,61 +29,99 @@
         <img class="site-logo" src="./assets/images/logo.png" alt="课题组 Logo">
         <div class="site-title-wrap">
           <!-- 文字替换：课题组名称 -->
-          <p class="site-title">课题组名称 / Research Group Name</p>
-          <p class="site-subtitle">University · School / Department · Laboratory</p>
+          <p class="site-title">卢普顺课题组 / Pushun Lu Group</p>
+          <p class="site-subtitle">Xiamen University / College of Physical Science and Technology</p>
         </div>
       </div>
     </div>
     <nav class="main-nav" aria-label="主导航">
       <div class="nav-inner">
-        <a class="nav-link " href="./index.html">Publications</a>
-        <a class="nav-link " href="./advisor.html">导师简介</a>
-        <a class="nav-link " href="./members.html">课题组成员</a>
-        <a class="nav-link " href="./patents.html">专利成果</a>
-        <a class="nav-link " href="./news.html">课题组新闻</a>
-        <a class="nav-link active" href="./equipment.html">实验室仪器</a>
+        <a class="nav-link " data-nav-home href="./home.html"><span class="nav-link-text">主页</span><span class="nav-link-en">Home</span></a>
+        <a class="nav-link " href="./index.html"><span class="nav-link-text">论文成果</span><span class="nav-link-en">Publications</span></a>
+        <a class="nav-link " href="./advisor.html"><span class="nav-link-text">导师简介</span><span class="nav-link-en">Principal Investigator</span></a>
+        <a class="nav-link " href="./members.html"><span class="nav-link-text">课题组成员</span><span class="nav-link-en">Members</span></a>
+        <a class="nav-link " href="./patents.html"><span class="nav-link-text">专利成果</span><span class="nav-link-en">Patents</span></a>
+        <a class="nav-link " href="./news.html"><span class="nav-link-text">课题组新闻</span><span class="nav-link-en">News</span></a>
+        <a class="nav-link active" href="./equipment.html"><span class="nav-link-text">实验室仪器</span><span class="nav-link-en">Facilities</span></a>
       </div>
     </nav>
   </header>
   <main class="page-shell">
     <section class="page-heading">
       <h1>实验室仪器 / Equipment</h1>
-      <p>点击仪器图片可放大查看原图。复制 equipment-card 即可新增仪器。</p>
     </section>
 
+    <!-- ============================================================
+         一台仪器一张卡片，一共 6 张，一行排 4 张。
+         每张卡片只有两样东西：上面是图片，下面是仪器名称。
+
+         ★ 仪器名称在哪里改 ★
+           就是每张卡片最后那一行：
+             <h2 class="equipment-name">仪器名称 1</h2>
+           把「仪器名称 1」这几个字换成真的仪器名就行，别的都不用动。
+
+         图片在 assets/images/equipment/ 下，按 equipment-01 ~ equipment-06 编号，
+         跟下面卡片一一对应。要换图：把新图按同名覆盖进去即可
+         （尺寸随便，界面会整张缩放着放进去，不裁切）。
+
+         要加一台：整块 <article class="equipment-card card">…</article> 复制一份，
+         把 img 的 src、aria-label 里的序号、h2 里的仪器名改掉。
+
+         一行排几张：在 style.css 的 .equipment-grid 里改 repeat(4, …) 的数字。
+         ============================================================ -->
     <section class="equipment-grid">
       <article class="equipment-card card">
         <button class="equipment-image-button" type="button" data-enlarge aria-label="放大查看仪器 1 图片">
           <!-- 图片替换：assets/images/equipment/equipment-01.jpg -->
           <img class="equipment-image" src="./assets/images/equipment/equipment-01.jpg" alt="仪器 1 图片占位">
         </button>
-        <div class="equipment-content">
-          <h2>仪器名称 1</h2>
-          <p><strong>主要功能：</strong>填写仪器的核心功能。</p>
-          <p><strong>参数简介：</strong></p>
-          <ul class="equipment-specs">
-            <li>参数 A：……</li>
-            <li>参数 B：……</li>
-            <li>参数 C：……</li>
-          </ul>
-          <p><strong>应用场景：</strong>填写该设备主要用于哪些实验、测试或制备环节。</p>
-        </div>
+        <!-- ↓↓↓ 仪器名称 1：改这一行的字 ↓↓↓ -->
+        <h2 class="equipment-name">NEWARE一体式恒温电池测试系统</h2>
       </article>
 
       <article class="equipment-card card">
         <button class="equipment-image-button" type="button" data-enlarge aria-label="放大查看仪器 2 图片">
+          <!-- 图片替换：assets/images/equipment/equipment-02.jpg -->
           <img class="equipment-image" src="./assets/images/equipment/equipment-02.jpg" alt="仪器 2 图片占位">
         </button>
-        <div class="equipment-content">
-          <h2>仪器名称 2</h2>
-          <p><strong>主要功能：</strong>填写仪器的核心功能。</p>
-          <p><strong>参数简介：</strong></p>
-          <ul class="equipment-specs">
-            <li>参数 A：……</li>
-            <li>参数 B：……</li>
-          </ul>
-          <p><strong>应用场景：</strong>填写应用场景。</p>
-        </div>
+        <!-- ↓↓↓ 仪器名称 2：改这一行的字 ↓↓↓ -->
+        <h2 class="equipment-name">CT2001A 电池测试系统</h2>
+      </article>
+
+      <article class="equipment-card card">
+        <button class="equipment-image-button" type="button" data-enlarge aria-label="放大查看仪器 3 图片">
+          <!-- 图片替换：assets/images/equipment/equipment-03.jpg -->
+          <img class="equipment-image" src="./assets/images/equipment/equipment-03.jpg" alt="仪器 3 图片占位">
+        </button>
+        <!-- ↓↓↓ 仪器名称 3：改这一行的字 ↓↓↓ -->
+        <h2 class="equipment-name">MIKROUNA双联惰性气体手套箱</h2>
+      </article>
+
+      <article class="equipment-card card">
+        <button class="equipment-image-button" type="button" data-enlarge aria-label="放大查看仪器 4 图片">
+          <!-- 图片替换：assets/images/equipment/equipment-04.jpg -->
+          <img class="equipment-image" src="./assets/images/equipment/equipment-04.jpg" alt="仪器 4 图片占位">
+        </button>
+        <!-- ↓↓↓ 仪器名称 4：改这一行的字 ↓↓↓ -->
+        <h2 class="equipment-name">手套箱</h2>
+      </article>
+
+      <article class="equipment-card card">
+        <button class="equipment-image-button" type="button" data-enlarge aria-label="放大查看仪器 5 图片">
+          <!-- 图片替换：assets/images/equipment/equipment-05.jpg -->
+          <img class="equipment-image" src="./assets/images/equipment/equipment-05.jpg" alt="仪器 5 图片占位">
+        </button>
+        <!-- ↓↓↓ 仪器名称 5：改这一行的字 ↓↓↓ -->
+        <h2 class="equipment-name">VMP3e 多通道电化学工作站</h2>
+      </article>
+
+      <article class="equipment-card card">
+        <button class="equipment-image-button" type="button" data-enlarge aria-label="放大查看仪器 6 图片">
+          <!-- 图片替换：assets/images/equipment/equipment-06.jpg -->
+          <img class="equipment-image" src="./assets/images/equipment/equipment-06.jpg" alt="仪器 6 图片占位">
+        </button>
+        <!-- ↓↓↓ 仪器名称 6：改这一行的字 ↓↓↓ -->
+        <h2 class="equipment-name">NEWARE分体式恒温电池测试系统</h2>
       </article>
     </section>
   </main>

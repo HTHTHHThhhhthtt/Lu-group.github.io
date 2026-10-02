@@ -6,6 +6,20 @@
   <meta name="description" content="课题组成员展示">
   <title>课题组成员 | Research Group</title>
   <link rel="stylesheet" href="./assets/css/style.css">
+  <!-- 翻页动画的“接棒”脚本：上一页在 sessionStorage 里留了 up / down，
+       这里赶在页面画出来之前把类加到 <html> 上，新页面才能接着滑进来。
+       没有留值（直接打开网址、刷新、从别的站过来）就不播进场动画。
+       规则见 assets/js/main.js 和 style.css 的「页面切换动画」一段。 -->
+  <script>
+    (function () {
+      var dir = null;
+      try { dir = sessionStorage.getItem("pageTransition"); } catch (e) {}
+      if (dir === "up" || dir === "down") {
+        document.documentElement.classList.add("enter-" + dir);
+      }
+      try { sessionStorage.removeItem("pageTransition"); } catch (e) {}
+    })();
+  </script>
 </head>
 <body>
   <header class="site-header">
@@ -15,27 +29,31 @@
         <img class="site-logo" src="./assets/images/logo.png" alt="课题组 Logo">
         <div class="site-title-wrap">
           <!-- 文字替换：课题组名称 -->
-          <p class="site-title">课题组名称 / Research Group Name</p>
-          <p class="site-subtitle">University · School / Department · Laboratory</p>
+          <p class="site-title">卢普顺课题组 / Pushun Lu Group</p>
+          <p class="site-subtitle">Xiamen University / College of Physical Science and Technology</p>
         </div>
       </div>
     </div>
     <nav class="main-nav" aria-label="主导航">
       <div class="nav-inner">
-        <a class="nav-link " href="./index.html">Publications</a>
-        <a class="nav-link " href="./advisor.html">导师简介</a>
-        <a class="nav-link active" href="./members.html">课题组成员</a>
-        <a class="nav-link " href="./patents.html">专利成果</a>
-        <a class="nav-link " href="./news.html">课题组新闻</a>
-        <a class="nav-link " href="./equipment.html">实验室仪器</a>
+        <a class="nav-link " data-nav-home href="./home.html"><span class="nav-link-text">主页</span><span class="nav-link-en">Home</span></a>
+        <a class="nav-link " href="./index.html"><span class="nav-link-text">论文成果</span><span class="nav-link-en">Publications</span></a>
+        <a class="nav-link " href="./advisor.html"><span class="nav-link-text">导师简介</span><span class="nav-link-en">Principal Investigator</span></a>
+        <a class="nav-link active" href="./members.html"><span class="nav-link-text">课题组成员</span><span class="nav-link-en">Members</span></a>
+        <a class="nav-link " href="./patents.html"><span class="nav-link-text">专利成果</span><span class="nav-link-en">Patents</span></a>
+        <a class="nav-link " href="./news.html"><span class="nav-link-text">课题组新闻</span><span class="nav-link-en">News</span></a>
+        <a class="nav-link " href="./equipment.html"><span class="nav-link-text">实验室仪器</span><span class="nav-link-en">Facilities</span></a>
       </div>
     </nav>
   </header>
   <main class="page-shell">
     <section class="page-heading">
       <h1>课题组成员 / Team</h1>
-      <p>按导师、博士生、硕士生、本科生、已毕业成员分类；复制 member-item 即可新增成员。</p>
     </section>
+
+    <!-- 说明：成员照片放在 assets/images/members/ 下，按 member-01、member-02 …… 顺序命名。
+         研究方向就是 member-level 下面那行 <p class="member-research">；
+         要补“个人成果”之类的内容，照样在它下面再加一行 <p> 即可。 -->
 
     <!-- ==================== 博士生分类 ==================== -->
     <section class="member-category">
@@ -43,12 +61,49 @@
       <div class="member-list">
         <article class="member-item">
           <!-- 图片替换：assets/images/members/member-01.jpg -->
-          <img class="member-photo" src="./assets/images/members/member-01.jpg" alt="成员照片占位">
+          <button class="zoom-button" type="button" data-enlarge aria-label="放大查看兰超飞照片">
+            <img class="member-photo" src="./assets/images/members/member-01.jpg" alt="兰超飞照片">
+          </button>
           <div>
-            <h3 class="member-name">成员姓名 A</h3>
-            <p class="member-level">博士研究生 · 20XX 级</p>
-            <p><strong>研究方向：</strong>研究方向占位。</p>
-            <p><strong>个人成果：</strong>论文、会议、奖项等成果占位。</p>
+            <h3 class="member-name">兰超飞</h3>
+            <p class="member-level">博士研究生</p>
+            <p class="member-research"><strong>研究方向：</strong>电池安全算法</p>
+          </div>
+        </article>
+
+        <article class="member-item">
+          <!-- 图片替换：assets/images/members/member-02.jpg -->
+          <button class="zoom-button" type="button" data-enlarge aria-label="放大查看刘炎照片">
+            <img class="member-photo" src="./assets/images/members/member-02.jpg" alt="刘炎照片">
+          </button>
+          <div>
+            <h3 class="member-name">刘炎</h3>
+            <p class="member-level">博士研究生</p>
+            <p class="member-research"><strong>研究方向：</strong>锂离子电池硅负极</p>
+          </div>
+        </article>
+
+        <article class="member-item">
+          <!-- 图片替换：assets/images/members/member-03.jpg -->
+          <button class="zoom-button" type="button" data-enlarge aria-label="放大查看张丹照片">
+            <img class="member-photo" src="./assets/images/members/member-03.jpg" alt="张丹照片">
+          </button>
+          <div>
+            <h3 class="member-name">张丹</h3>
+            <p class="member-level">博士研究生</p>
+            <p class="member-research"><strong>研究方向：</strong>卤化物固态电解质</p>
+          </div>
+        </article>
+
+        <article class="member-item">
+          <!-- 图片替换：assets/images/members/member-04.jpg -->
+          <button class="zoom-button" type="button" data-enlarge aria-label="放大查看林双权照片">
+            <img class="member-photo" src="./assets/images/members/member-04.jpg" alt="林双权照片">
+          </button>
+          <div>
+            <h3 class="member-name">林双权</h3>
+            <p class="member-level">博士研究生</p>
+            <p class="member-research"><strong>研究方向：</strong>低压力固态硅基负极</p>
           </div>
         </article>
       </div>
@@ -59,32 +114,82 @@
       <h2 class="section-title">硕士生 / Master Students</h2>
       <div class="member-list">
         <article class="member-item">
-          <img class="member-photo" src="./assets/images/members/member-02.jpg" alt="成员照片占位">
+          <!-- 图片替换：assets/images/members/member-05.jpg -->
+          <button class="zoom-button" type="button" data-enlarge aria-label="放大查看张溢照片">
+            <img class="member-photo" src="./assets/images/members/member-05.jpg" alt="张溢照片">
+          </button>
           <div>
-            <h3 class="member-name">成员姓名 B</h3>
-            <p class="member-level">硕士研究生 · 20XX 级</p>
-            <p><strong>研究方向：</strong>研究方向占位。</p>
-            <p><strong>个人成果：</strong>论文、会议、奖项等成果占位。</p>
+            <h3 class="member-name">张溢</h3>
+            <p class="member-level">硕士研究生</p>
+            <p class="member-research"><strong>研究方向：</strong>电池安全算法</p>
+          </div>
+        </article>
+
+        <article class="member-item">
+          <!-- 图片替换：assets/images/members/member-06.jpg -->
+          <button class="zoom-button" type="button" data-enlarge aria-label="放大查看张妞照片">
+            <img class="member-photo" src="./assets/images/members/member-06.jpg" alt="张妞照片">
+          </button>
+          <div>
+            <h3 class="member-name">张妞</h3>
+            <p class="member-level">硕士研究生</p>
+            <p class="member-research"><strong>研究方向：</strong>Zr基卤化物固态电解质</p>
+          </div>
+        </article>
+
+        <article class="member-item">
+          <!-- 图片替换：assets/images/members/member-07.jpg -->
+          <button class="zoom-button" type="button" data-enlarge aria-label="放大查看张娜照片">
+            <img class="member-photo" src="./assets/images/members/member-07.jpg" alt="张娜照片">
+          </button>
+          <div>
+            <h3 class="member-name">张娜</h3>
+            <p class="member-level">硕士研究生</p>
+            <p class="member-research"><strong>研究方向：</strong>高熵卤化物固态电解质</p>
+          </div>
+        </article>
+
+        <article class="member-item">
+          <!-- 图片替换：assets/images/members/member-08.jpg -->
+          <button class="zoom-button" type="button" data-enlarge aria-label="放大查看董小亿照片">
+            <img class="member-photo" src="./assets/images/members/member-08.jpg" alt="董小亿照片">
+          </button>
+          <div>
+            <h3 class="member-name">董小亿</h3>
+            <p class="member-level">硕士研究生</p>
+            <p class="member-research"><strong>研究方向：</strong>固态电解质</p>
+          </div>
+        </article>
+
+        <article class="member-item">
+          <!-- 图片替换：assets/images/members/member-09.jpg -->
+          <button class="zoom-button" type="button" data-enlarge aria-label="放大查看陈昊天照片">
+            <img class="member-photo" src="./assets/images/members/member-09.jpg" alt="陈昊天照片">
+          </button>
+          <div>
+            <h3 class="member-name">陈昊天</h3>
+            <p class="member-level">硕士研究生</p>
+            <p class="member-research"><strong>研究方向：</strong>卤化物固态电解质</p>
           </div>
         </article>
       </div>
     </section>
 
-    <!-- 可继续增加：本科生 / 已毕业成员 / 访问学生等分类 -->
+    <!-- 之后要加“已毕业成员 / 本科生”等分类时，照下面这样复制一份即可：
     <section class="member-category">
       <h2 class="section-title">已毕业成员 / Alumni</h2>
       <div class="member-list">
         <article class="member-item">
-          <img class="member-photo" src="./assets/images/members/member-03.jpg" alt="成员照片占位">
+          <img class="member-photo" src="./assets/images/members/member-10.jpg" alt="成员照片">
           <div>
-            <h3 class="member-name">成员姓名 C</h3>
+            <h3 class="member-name">成员姓名</h3>
             <p class="member-level">20XX 届毕业生</p>
-            <p><strong>在组期间研究方向：</strong>研究方向占位。</p>
             <p><strong>毕业去向：</strong>单位或下一阶段学习情况。</p>
           </div>
         </article>
       </div>
     </section>
+    -->
   </main>
   <footer class="site-footer">
     <div class="footer-inner">

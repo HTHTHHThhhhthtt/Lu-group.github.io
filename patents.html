@@ -6,6 +6,20 @@
   <meta name="description" content="课题组专利成果展示">
   <title>专利成果 | Research Group</title>
   <link rel="stylesheet" href="./assets/css/style.css">
+  <!-- 翻页动画的“接棒”脚本：上一页在 sessionStorage 里留了 up / down，
+       这里赶在页面画出来之前把类加到 <html> 上，新页面才能接着滑进来。
+       没有留值（直接打开网址、刷新、从别的站过来）就不播进场动画。
+       规则见 assets/js/main.js 和 style.css 的「页面切换动画」一段。 -->
+  <script>
+    (function () {
+      var dir = null;
+      try { dir = sessionStorage.getItem("pageTransition"); } catch (e) {}
+      if (dir === "up" || dir === "down") {
+        document.documentElement.classList.add("enter-" + dir);
+      }
+      try { sessionStorage.removeItem("pageTransition"); } catch (e) {}
+    })();
+  </script>
 </head>
 <body>
   <header class="site-header">
@@ -15,39 +29,74 @@
         <img class="site-logo" src="./assets/images/logo.png" alt="课题组 Logo">
         <div class="site-title-wrap">
           <!-- 文字替换：课题组名称 -->
-          <p class="site-title">课题组名称 / Research Group Name</p>
-          <p class="site-subtitle">University · School / Department · Laboratory</p>
+          <p class="site-title">卢普顺课题组 / Pushun Lu Group</p>
+          <p class="site-subtitle">Xiamen University / College of Physical Science and Technology</p>
         </div>
       </div>
     </div>
     <nav class="main-nav" aria-label="主导航">
       <div class="nav-inner">
-        <a class="nav-link " href="./index.html">Publications</a>
-        <a class="nav-link " href="./advisor.html">导师简介</a>
-        <a class="nav-link " href="./members.html">课题组成员</a>
-        <a class="nav-link active" href="./patents.html">专利成果</a>
-        <a class="nav-link " href="./news.html">课题组新闻</a>
-        <a class="nav-link " href="./equipment.html">实验室仪器</a>
+        <a class="nav-link " data-nav-home href="./home.html"><span class="nav-link-text">主页</span><span class="nav-link-en">Home</span></a>
+        <a class="nav-link " href="./index.html"><span class="nav-link-text">论文成果</span><span class="nav-link-en">Publications</span></a>
+        <a class="nav-link " href="./advisor.html"><span class="nav-link-text">导师简介</span><span class="nav-link-en">Principal Investigator</span></a>
+        <a class="nav-link " href="./members.html"><span class="nav-link-text">课题组成员</span><span class="nav-link-en">Members</span></a>
+        <a class="nav-link active" href="./patents.html"><span class="nav-link-text">专利成果</span><span class="nav-link-en">Patents</span></a>
+        <a class="nav-link " href="./news.html"><span class="nav-link-text">课题组新闻</span><span class="nav-link-en">News</span></a>
+        <a class="nav-link " href="./equipment.html"><span class="nav-link-text">实验室仪器</span><span class="nav-link-en">Facilities</span></a>
       </div>
     </nav>
   </header>
   <main class="page-shell">
     <section class="page-heading">
       <h1>专利成果 / Patents</h1>
-      <p>按授权时间倒序排列；复制一个 patent-item 即可新增。</p>
     </section>
 
+    <!-- 说明：复制一个 <article class="patent-item"> 即可新增一项。
+         如需补简介，在 patent-meta 那一行下面加：<p>专利简介：……</p> -->
+
+    <h2 class="section-title">PCT 国际专利 / PCT Patent</h2>
     <section class="patent-list">
       <article class="patent-item">
-        <h2>[专利名称占位] 一种……的方法及装置</h2>
-        <p class="patent-meta">专利号：CNXXXXXXXXX · 授权时间：2026-XX-XX · 发明人：姓名 A、姓名 B、姓名 C</p>
-        <p>专利简介：在这里填写专利的主要技术内容、用途、创新点或转化情况。</p>
+        <h2>Sulfide solid electrolyte material, gas-phase synthesis method for materials thereof and application thereof</h2>
+        <p class="patent-meta">国际公开号：WO2022032956A1 · PCT 国际专利申请</p>
+      </article>
+    </section>
+
+    <h2 class="section-title">中国发明专利 / Chinese Invention Patents</h2>
+    <section class="patent-list">
+      <article class="patent-item">
+        <h2>硫化物固态电解质材料及其原料的气相合成方法及应用</h2>
+        <p class="patent-meta">专利号：CN 111977681 B · 已授权</p>
       </article>
 
       <article class="patent-item">
-        <h2>[专利名称占位] 另一项专利名称</h2>
-        <p class="patent-meta">专利号：CNXXXXXXXXX · 授权时间：2025-XX-XX · 发明人：姓名 A、姓名 B</p>
-        <p>专利简介：在这里填写专利简介。</p>
+        <h2>可分离回收的硫化物型固态电解质及其应用</h2>
+        <p class="patent-meta">专利号：CN 111834664 B · 已授权</p>
+      </article>
+
+      <article class="patent-item">
+        <h2>一种具有补锂和吸湿作用的硫化物固态电解质</h2>
+        <p class="patent-meta">专利号：CN 114447423 B · 已授权</p>
+      </article>
+
+      <article class="patent-item">
+        <h2>一种 TiS<sub>2</sub> 复合正极及全固态电池器件</h2>
+        <p class="patent-meta">专利号：CN 114447281 B · 已授权</p>
+      </article>
+
+      <article class="patent-item">
+        <h2>一种 FeS<sub>2</sub> 复合正极及全固态电池器件</h2>
+        <p class="patent-meta">专利号：CN 114464803 B · 已授权</p>
+      </article>
+
+      <article class="patent-item">
+        <h2>硫化物-聚合物复合固态电解质及其制备方法和应用</h2>
+        <p class="patent-meta">专利号：CN 112018458 B · 已授权</p>
+      </article>
+
+      <article class="patent-item">
+        <h2>一种 TiS<sub>2</sub> 复合正极及全固态电池器件</h2>
+        <p class="patent-meta">专利号：CN 116666566 B · 已授权</p>
       </article>
     </section>
   </main>

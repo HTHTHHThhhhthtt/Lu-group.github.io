@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="卢普顺课题组主页">
+  <title>主页 | Research Group</title>
+  <link rel="stylesheet" href="./assets/css/style.css">
+  <!-- 翻页动画的“接棒”脚本：上一页在 sessionStorage 里留了 up / down，
+       这里赶在页面画出来之前把类加到 <html> 上，新页面才能接着滑进来。
+       没有留值（直接打开网址、刷新、从别的站过来）就不播进场动画。
+       规则见 assets/js/main.js 和 style.css 的「页面切换动画」一段。 -->
+  <script>
+    (function () {
+      var dir = null;
+      try { dir = sessionStorage.getItem("pageTransition"); } catch (e) {}
+      if (dir === "up" || dir === "down") {
+        document.documentElement.classList.add("enter-" + dir);
+      }
+      try { sessionStorage.removeItem("pageTransition"); } catch (e) {}
+    })();
+  </script>
+</head>
+<body>
+  <header class="site-header">
+    <!-- 主页的横幅：带照片轮播（class 里的 hero-strip--home 就是开关，
+         其它页面没有这个 class，所以只显示一条深蓝横条）。
+         照片清单和切换快慢在 assets/js/main.js 顶部的 BANNER_PHOTOS。 -->
+    <div class="hero-strip hero-strip--home">
+      <div class="hero-inner">
+        <!-- 图片替换：assets/images/logo.png -->
+        <img class="site-logo" src="./assets/images/logo.png" alt="课题组 Logo">
+        <div class="site-title-wrap">
+          <!-- 文字替换：课题组名称 -->
+          <p class="site-title">卢普顺课题组 / Pushun Lu Group</p>
+          <p class="site-subtitle">Xiamen University / College of Physical Science and Technology</p>
+        </div>
+      </div>
+    </div>
+    <nav class="main-nav" aria-label="主导航">
+      <div class="nav-inner">
+        <a class="nav-link active" data-nav-home href="./home.html"><span class="nav-link-text">主页</span><span class="nav-link-en">Home</span></a>
+        <a class="nav-link " href="./index.html"><span class="nav-link-text">论文成果</span><span class="nav-link-en">Publications</span></a>
+        <a class="nav-link " href="./advisor.html"><span class="nav-link-text">导师简介</span><span class="nav-link-en">Principal Investigator</span></a>
+        <a class="nav-link " href="./members.html"><span class="nav-link-text">课题组成员</span><span class="nav-link-en">Members</span></a>
+        <a class="nav-link " href="./patents.html"><span class="nav-link-text">专利成果</span><span class="nav-link-en">Patents</span></a>
+        <a class="nav-link " href="./news.html"><span class="nav-link-text">课题组新闻</span><span class="nav-link-en">News</span></a>
+        <a class="nav-link " href="./equipment.html"><span class="nav-link-text">实验室仪器</span><span class="nav-link-en">Facilities</span></a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="page-shell page-shell--home">
+    <!-- ============================================================
+         论文期刊：一堵期刊封面墙，点封面跳到对应期刊官网。
+         封面图都在 assets/images/home/ 里。
+         要换图：把新图按同名覆盖进去即可（尺寸随便，界面会自己缩）。
+         要加一个期刊：整块 <a class="journal-card">…</a> 复制一份，改三处 ——
+           href="期刊网址" / img 的 src="封面图路径" / 下面 journal-name 里的期刊名。
+         一行排几个、封面多大，在 style.css 的 .journal-card 里调 flex 基准宽。
+         ============================================================ -->
+    <section aria-labelledby="journals-heading">
+      <h2 class="section-title" id="journals-heading">论文期刊 / Journals</h2>
+
+      <div class="journal-carousel">
+        <button class="journal-arrow" type="button" data-journal-prev
+                aria-label="往前看一张期刊">&#8249;</button>
+
+        <!-- 这一条就是滚动的轨道：main.js 会把它复制一份接在后面，
+             滚到头时悄悄绕回起点，所以能一直滚下去。 -->
+        <div class="journal-marquee">
+          <div class="journal-track">
+          <a class="journal-card" href="https://www.nature.com/ncomms/" target="_blank" rel="noopener">
+            <img class="journal-cover" src="./assets/images/home/nature-communications.jpg" alt="" loading="lazy" decoding="async">
+            <span class="journal-name">Nature Communications</span>
+          </a>
+
+          <a class="journal-card" href="https://www.cell.com/joule/home" target="_blank" rel="noopener">
+            <img class="journal-cover" src="./assets/images/home/joule.jpg" alt="" loading="lazy" decoding="async">
+            <span class="journal-name">Joule</span>
+          </a>
+
+          <a class="journal-card" href="https://advanced.onlinelibrary.wiley.com/" target="_blank" rel="noopener">
+            <img class="journal-cover" src="./assets/images/home/advanced-materials-1.jpg" alt="" loading="lazy" decoding="async">
+            <span class="journal-name">Advanced Materials</span>
+          </a>
+
+          <a class="journal-card" href="https://advanced.onlinelibrary.wiley.com/journal/16163028" target="_blank" rel="noopener">
+            <img class="journal-cover" src="./assets/images/home/advanced-functional-materials.jpg" alt="" loading="lazy" decoding="async">
+            <span class="journal-name">Advanced Functional Materials</span>
+          </a>
+
+          <a class="journal-card" href="https://www.sciencedirect.com/journal/energy-storage-materials" target="_blank" rel="noopener">
+            <img class="journal-cover" src="./assets/images/home/energy-storage-materials.jpg" alt="" loading="lazy" decoding="async">
+            <span class="journal-name">Energy Storage Materials</span>
+          </a>
+
+          <a class="journal-card" href="https://www.sciencedirect.com/journal/nano-energy/" target="_blank" rel="noopener">
+            <img class="journal-cover" src="./assets/images/home/nano-energy.jpg" alt="" loading="lazy" decoding="async">
+            <span class="journal-name">Nano Energy</span>
+          </a>
+
+          <a class="journal-card" href="https://pubs.acs.org/ancac3" target="_blank" rel="noopener">
+            <img class="journal-cover" src="./assets/images/home/acs-nano.jpg" alt="" loading="lazy" decoding="async">
+            <span class="journal-name">ACS Nano</span>
+          </a>
+
+          <a class="journal-card" href="https://link.springer.com/journal/41918" target="_blank" rel="noopener">
+            <img class="journal-cover" src="./assets/images/home/Electrochemical-Energy-Reviews.jpg" alt="" loading="lazy" decoding="async">
+            <span class="journal-name">Electrochemical Energy Reviews</span>
+          </a>
+
+          <a class="journal-card" href="https://advanced.onlinelibrary.wiley.com/journal/15214095" target="_blank" rel="noopener">
+            <img class="journal-cover" src="./assets/images/home/advanced-materials-2.jpg" alt="" loading="lazy" decoding="async">
+            <span class="journal-name">Advanced Materials</span>
+          </a>
+
+          <a class="journal-card" href="https://pubs.acs.org/aelccp" target="_blank" rel="noopener">
+            <img class="journal-cover" src="./assets/images/home/acs-energy-letters.jpg" alt="" loading="lazy" decoding="async">
+            <span class="journal-name">ACS Energy Letters</span>
+          </a>
+
+          <a class="journal-card" href="https://pubs.acs.org/nalefd" target="_blank" rel="noopener">
+            <img class="journal-cover" src="./assets/images/home/nano-letters.jpg" alt="" loading="lazy" decoding="async">
+            <span class="journal-name">Nano Letters</span>
+          </a>
+          </div>
+        </div>
+
+        <button class="journal-arrow" type="button" data-journal-next
+                aria-label="往后看一张期刊">&#8250;</button>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         代表性论文：挑 5 篇放在主页（2 篇 Nature Communications、
+         2 篇 Advanced Materials、1 篇 Joule）。
+         样式和「论文成果」页完全一样（同一套 .publication-item），
+         所以这里的卡片是从 index.html 原样搬过来的。
+         想换哪一篇：去 index.html 复制那一整块 <article> 换掉下面某一块即可。
+         ============================================================ -->
+    <section aria-labelledby="selected-heading">
+      <h2 class="section-title" id="selected-heading">代表性论文 / Selected Publications</h2>
+
+      <div class="publication-list">
+        <article class="publication-item">
+          <div>
+            <div class="publication-meta">Nature Communications · 2026 · 17, 5495</div>
+            <h3 class="publication-title">Unraveling the foreign-cation effect in UCl3-type halide solid electrolytes for low-temperature all-solid-state batteries</h3>
+            <p class="publication-authors"><strong>Pushun Lu#</strong>, Zhimin Zhou#, Shiyue Cao#, Jiamin Fu, Weiping Li, Kaiyong Tuo, Suze Liang, Jian Hong, Jiuwei Lei, Jiaxu Zhang, Ziqing Wang, Shutao Zhang, Guantai Hu, Chao Wang, Tingting Liu, Suting Weng, Wei Xia, Xuefeng Wang, Xueliang Sun*, Changhong Wang*.</p>
+            <p class="publication-links"><a href="https://doi.org/10.1038/s41467-026-70621-x" target="_blank" rel="noopener">原文链接：DOI: 10.1038/s41467-026-70621-x</a></p>
+          </div>
+          <!-- 图片替换：assets/images/publications/pub-01.jpg -->
+          <button class="zoom-button" type="button" data-enlarge aria-label="放大查看论文配图 1">
+            <img class="publication-image" loading="lazy" decoding="async" src="./assets/images/publications/pub-01.jpg" alt="论文图文摘要 1">
+          </button>
+        </article>
+        <article class="publication-item">
+          <div>
+            <div class="publication-meta">Advanced Materials · 2026 · 38: e72694</div>
+            <h3 class="publication-title">Embedding Fe-based redox chemistry into low-cost oxyhalide solid electrolytes for high-performance all-solid-state batteries</h3>
+            <p class="publication-authors">Zhimin Zhou#, <strong>Pushun Lu#</strong>, Suzhe Liang, Kaiyong Tuo, Jiamin Fu, Shengjie Xia, Yilin Chen, Zhiyun Wu, Jiaxu Zhang, Ziqing Wang, Shutao Zhang, Guantai Hu, Jian Hong, Mengfei Zhu, Chao Wang, Tingting Liu, Mingfeng Wei, Wei Xia, Liwei Chen*, Xueliang Sun*, Changhong Wang*.</p>
+            <p class="publication-links"><a href="https://doi.org/10.1002/adma.72694" target="_blank" rel="noopener">原文链接：DOI: 10.1002/adma.72694</a></p>
+          </div>
+          <!-- 图片替换：assets/images/publications/pub-02.jpg -->
+          <button class="zoom-button" type="button" data-enlarge aria-label="放大查看论文配图 2">
+            <img class="publication-image" loading="lazy" decoding="async" src="./assets/images/publications/pub-02.jpg" alt="论文图文摘要 2">
+          </button>
+        </article>
+        <article class="publication-item">
+          <div>
+            <div class="publication-meta">Joule · 2024 · 8, 635-657</div>
+            <h3 class="publication-title">Materials and chemistry design for low-temperature all-solid-state batteries</h3>
+            <p class="publication-authors"><strong>Pushun Lu</strong>, Zhimin Zhou, Zuxiang Xiao, Jiaze Lu, Jiaxu Zhang, Guantai Hu, Wenlin Yan, Shengjie Xia, Shutao Zhang, Ziqing Wang, Hong Li, Changhong Wang*, Fan Wu*, Xueliang Sun*.</p>
+            <p class="publication-links"><a href="https://doi.org/10.1016/j.joule.2024.01.027" target="_blank" rel="noopener">原文链接：DOI: 10.1016/j.joule.2024.01.027</a></p>
+          </div>
+          <!-- 图片替换：assets/images/publications/pub-04.jpg -->
+          <button class="zoom-button" type="button" data-enlarge aria-label="放大查看论文配图 4">
+            <img class="publication-image" loading="lazy" decoding="async" src="./assets/images/publications/pub-04.jpg" alt="论文图文摘要 4">
+          </button>
+        </article>
+        <article class="publication-item">
+          <div>
+            <div class="publication-meta">Nature Communications · 2023 · 14, 4077</div>
+            <h3 class="publication-title">Realizing long-cycling all-solid-state Li-In||TiS2 batteries using Li6+xMxAs1-xS5I (M=Si, Sn) sulfide solid electrolytes</h3>
+            <p class="publication-authors"><strong>Pushun Lu</strong>, Yu Xia, Guochen Sun, Dengxu Wu, Siyuan Wu, Wenlin Yan, Xiang Zhu, Jiaze Lu, Quanhai Niu, Shaochen Shi, Zhengju Sha, Liquan Chen, Hong Li*, Fan Wu*.</p>
+            <p class="publication-links"><a href="https://doi.org/10.1038/s41467-023-39686-w" target="_blank" rel="noopener">原文链接：DOI: 10.1038/s41467-023-39686-w</a></p>
+          </div>
+          <!-- 图片替换：assets/images/publications/pub-08.jpg -->
+          <button class="zoom-button" type="button" data-enlarge aria-label="放大查看论文配图 8">
+            <img class="publication-image" loading="lazy" decoding="async" src="./assets/images/publications/pub-08.jpg" alt="论文图文摘要 8">
+          </button>
+        </article>
+        <article class="publication-item">
+          <div>
+            <div class="publication-meta">Advanced Materials · 2021 · 33(32): 2100921</div>
+            <h3 class="publication-title">Superior all-solid-state batteries enabled by a gas-phase-synthesized sulfide electrolyte with ultrahigh moisture stability and ionic conductivity</h3>
+            <p class="publication-authors"><strong>Pushun Lu</strong>, Lilu Liu, Shuo Wang, Jieru Xu, Jian Peng, Wenlin Yan, Qiuchen Wang, Hong Li, Liquan Chen, Fan Wu*.</p>
+            <p class="publication-links"><a href="https://doi.org/10.1002/adma.202100921" target="_blank" rel="noopener">原文链接：DOI: 10.1002/adma.202100921</a></p>
+          </div>
+          <!-- 图片替换：assets/images/publications/pub-12.jpg -->
+          <button class="zoom-button" type="button" data-enlarge aria-label="放大查看论文配图 12">
+            <img class="publication-image" loading="lazy" decoding="async" src="./assets/images/publications/pub-12.jpg" alt="论文图文摘要 12">
+          </button>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <!-- 文字替换：单位、地址、联系方式 -->
+      © <span data-current-year></span> Research Group Name. All rights reserved. · 地址/邮箱可在此处填写
+    </div>
+  </footer>
+  <script src="./assets/js/main.js"></script>
+</body>
+</html>

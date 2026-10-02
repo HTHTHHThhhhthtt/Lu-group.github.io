@@ -6,6 +6,20 @@
   <meta name="description" content="课题组导师简介">
   <title>导师简介 | Research Group</title>
   <link rel="stylesheet" href="./assets/css/style.css">
+  <!-- 翻页动画的“接棒”脚本：上一页在 sessionStorage 里留了 up / down，
+       这里赶在页面画出来之前把类加到 <html> 上，新页面才能接着滑进来。
+       没有留值（直接打开网址、刷新、从别的站过来）就不播进场动画。
+       规则见 assets/js/main.js 和 style.css 的「页面切换动画」一段。 -->
+  <script>
+    (function () {
+      var dir = null;
+      try { dir = sessionStorage.getItem("pageTransition"); } catch (e) {}
+      if (dir === "up" || dir === "down") {
+        document.documentElement.classList.add("enter-" + dir);
+      }
+      try { sessionStorage.removeItem("pageTransition"); } catch (e) {}
+    })();
+  </script>
 </head>
 <body>
   <header class="site-header">
@@ -15,63 +29,133 @@
         <img class="site-logo" src="./assets/images/logo.png" alt="课题组 Logo">
         <div class="site-title-wrap">
           <!-- 文字替换：课题组名称 -->
-          <p class="site-title">课题组名称 / Research Group Name</p>
-          <p class="site-subtitle">University · School / Department · Laboratory</p>
+          <p class="site-title">卢普顺课题组 / Pushun Lu Group</p>
+          <p class="site-subtitle">Xiamen University / College of Physical Science and Technology</p>
         </div>
       </div>
     </div>
     <nav class="main-nav" aria-label="主导航">
       <div class="nav-inner">
-        <a class="nav-link " href="./index.html">Publications</a>
-        <a class="nav-link active" href="./advisor.html">导师简介</a>
-        <a class="nav-link " href="./members.html">课题组成员</a>
-        <a class="nav-link " href="./patents.html">专利成果</a>
-        <a class="nav-link " href="./news.html">课题组新闻</a>
-        <a class="nav-link " href="./equipment.html">实验室仪器</a>
+        <a class="nav-link " data-nav-home href="./home.html"><span class="nav-link-text">主页</span><span class="nav-link-en">Home</span></a>
+        <a class="nav-link " href="./index.html"><span class="nav-link-text">论文成果</span><span class="nav-link-en">Publications</span></a>
+        <a class="nav-link active" href="./advisor.html"><span class="nav-link-text">导师简介</span><span class="nav-link-en">Principal Investigator</span></a>
+        <a class="nav-link " href="./members.html"><span class="nav-link-text">课题组成员</span><span class="nav-link-en">Members</span></a>
+        <a class="nav-link " href="./patents.html"><span class="nav-link-text">专利成果</span><span class="nav-link-en">Patents</span></a>
+        <a class="nav-link " href="./news.html"><span class="nav-link-text">课题组新闻</span><span class="nav-link-en">News</span></a>
+        <a class="nav-link " href="./equipment.html"><span class="nav-link-text">实验室仪器</span><span class="nav-link-en">Facilities</span></a>
       </div>
     </nav>
   </header>
   <main class="page-shell">
     <section class="page-heading">
       <h1>导师简介 / Principal Investigator</h1>
-      <p>上部为照片与精简介绍，下部为完整简历。</p>
     </section>
 
     <section class="advisor-overview card">
-      <!-- 图片替换：assets/images/advisor/advisor.jpg -->
-      <img class="advisor-photo" src="./assets/images/advisor/advisor.jpg" alt="导师照片占位">
+      <!-- 图片替换：assets/images/teacher_picture.png（换图时保持同名同目录即可）
+           外面那层按钮负责“点一下看大图”，换图时只改里面的 src，按钮不要删 -->
+      <button class="zoom-button" type="button" data-enlarge aria-label="放大查看导师照片">
+        <img class="advisor-photo" src="./assets/images/teacher_picture.png" alt="导师照片：卢普顺">
+      </button>
       <div>
         <!-- 文字替换：姓名、职称、研究方向、任职 -->
-        <h2 class="profile-name">导师姓名 / Prof. Name</h2>
-        <p class="profile-role">教授 / 博士生导师 · 学院/实验室</p>
-        <p><strong>研究方向：</strong>研究方向 1；研究方向 2；研究方向 3。</p>
-        <p><strong>主要任职：</strong>在这里填写主要学术任职、实验室职务或社会兼职。</p>
-        <p><strong>联系方式：</strong>name@example.edu.cn</p>
-        <p class="placeholder-note">编辑提示：直接修改本段 HTML 中的纯文字即可。</p>
+        <h2 class="profile-name">卢普顺 / Pushun Lu</h2>
+        <p class="profile-role">副教授，博士生导师</p>
+        <p><strong>研究方向：</strong></p>
+        <ol class="profile-list">
+          <li>硫化物 / 卤化物固态电解质材料</li>
+          <li>硅基负极材料</li>
+          <li>全固态电池器件</li>
+        </ol>
+        <p><strong>主要任职：</strong>厦门大学物理科学与技术学院副教授（南强青年拔尖人才计划 B 类）、博士生导师。</p>
+        <p><strong>电话：</strong>18805928086</p>
+        <p><strong>邮箱：</strong>pslu@xmu.edu.cn</p>
+        <p><strong>办公室：</strong>物理大楼 517 室</p>
+        <p><strong>教师主页：</strong><a class="link-pill" href="https://cpst.xmu.edu.cn/info/1217/37551.htm" target="_blank" rel="noopener">https://cpst.xmu.edu.cn/info/1217/37551.htm</a></p>
       </div>
     </section>
 
     <section class="cv-section card">
       <h2>详细简历 / Curriculum Vitae</h2>
-      <div class="cv-block">
-        <h3>教育经历</h3>
-        <p>20XX–20XX：学校 / 专业 / 学位。<br>20XX–20XX：学校 / 专业 / 学位。</p>
-      </div>
+
       <div class="cv-block">
         <h3>工作经历</h3>
-        <p>20XX–至今：单位 / 职称。<br>20XX–20XX：单位 / 职称。</p>
+        <ul class="cv-timeline">
+          <li>
+            <span class="cv-date">2025.09–至今</span>
+            <span>厦门大学物理科学与技术学院，副教授（南强青年拔尖人才计划 B 类），博士生导师</span>
+          </li>
+          <li>
+            <span class="cv-date">2023.07–2025.08</span>
+            <span>宁波市东方理工高等研究院，材料科学与工程（博士后，合作导师：孙学良院士）</span>
+          </li>
+        </ul>
       </div>
+
+      <div class="cv-block">
+        <h3>教育经历</h3>
+        <ul class="cv-timeline">
+          <li>
+            <span class="cv-date">2020.09–2023.06</span>
+            <span>中国科学院物理研究所，材料物理与化学（博士，导师：吴凡研究员 / 国家海外高层次人才）</span>
+          </li>
+          <li>
+            <span class="cv-date">2018.09–2020.08</span>
+            <span>中国科学院物理研究所，凝聚态物理（硕士，导师：李泓研究员 / 国家杰青）</span>
+          </li>
+          <li>
+            <span class="cv-date">2014.09–2018.06</span>
+            <span>厦门大学物理科学与技术学院，微电子科学与工程（本科，导师：陈松岩教授）</span>
+          </li>
+        </ul>
+      </div>
+
       <div class="cv-block">
         <h3>科研项目</h3>
-        <p>项目名称、项目来源、项目编号、起止时间、主持/参与情况。</p>
+        <ul class="cv-timeline">
+          <li>
+            <span class="cv-date">主持</span>
+            <span>国家自然科学基金青年项目（C 类）；厦门大学南强青年拔尖人才计划（B 类）；厦门市自然科学基金青年项目</span>
+          </li>
+          <li>
+            <span class="cv-date">曾主持</span>
+            <span>第十届中国科协青年人才托举工程项目；中国博士后科学基金第 17 批特别资助、第 75 批面上资助项目</span>
+          </li>
+        </ul>
       </div>
-      <div class="cv-block">
-        <h3>代表性成果</h3>
-        <p>可填写代表性论文、专利、专著、标准、软件著作权等。</p>
-      </div>
+
       <div class="cv-block">
         <h3>荣誉与奖励</h3>
-        <p>奖项名称、授予单位、年份。</p>
+        <ul class="cv-timeline">
+          <li>
+            <span class="cv-date">2026 年</span>
+            <span>宁波东方理工大学物质与能源研究院“科研卓越奖（博士后组一等奖）”</span>
+          </li>
+          <li>
+            <span class="cv-date">2026 年</span>
+            <span>全国固态电池研讨会优秀口头报告奖</span>
+          </li>
+          <li>
+            <span class="cv-date">2024 年</span>
+            <span>北京市优秀博士学位论文</span>
+          </li>
+          <li>
+            <span class="cv-date">2024 年</span>
+            <span>宁波市东方理工高等研究院“卓越博士后”</span>
+          </li>
+          <li>
+            <span class="cv-date">2021 年</span>
+            <span>“Superior All-Solid-State Batteries Enabled by a Gas-Phase-Synthesized Sulfide Electrolyte with Ultrahigh Moisture Stability and Ionic Conductivity”入选最受能源学人用户关注的研究工作</span>
+          </li>
+          <li>
+            <span class="cv-date">2020、2022 年</span>
+            <span>中国科学院物理研究所所长奖学金</span>
+          </li>
+          <li>
+            <span class="cv-date">2020–2021 年</span>
+            <span>中国科学院大学三好学生</span>
+          </li>
+        </ul>
       </div>
     </section>
   </main>

@@ -13,7 +13,25 @@
   --brand-2: #496a82;
   --accent: #8b5e3c;
   --max-width: 1180px;
-  --header-height: 168px;
+  /* ↓↓↓ 【横幅高度】顶部横幅分两种，高度也分两个（导航条高度另算）：
+         ① 主页（home.html）：放照片轮播的高横幅 —— 看 --hero-height
+         ② 其它页面：只有一条深蓝横条，放校徽和课题组名称 —— 看 --hero-bar-height
+         窄屏（≤860px）和手机屏（≤560px）各有一套值，
+         见文件下半部分那两个 @media，想让各屏一致就一起改。 */
+  --hero-height: 400px;      /* 主页照片横幅高度 */
+  --hero-bar-height: 110px;  /* 其它页面深蓝横条高度（放下校徽、上下还留点空就行） */
+  /* ↓↓↓ 导航条（论文成果 / 导师简介 那一行）的高度：
+         调大 = 这一行上下间距更宽松，调小 = 更紧凑 */
+  --nav-height: 76px;
+  /* ↓↓↓ 玻璃面板离导航条上下边缘的留白（越大，胶囊越“瘦”） */
+  --nav-pad-y: 10px;
+  /* ↓↓↓ 横幅内容到左上角的留白：调小更贴角，调大更松快 */
+  --hero-pad-x: 26px;   /* 左边留白（越小越靠左，0 就是贴死左边） */
+  --hero-pad-y: 22px;   /* 上边留白（不贴顶就保持 > 0） */
+  /* ↓↓↓ Logo 尺寸：改宽度即可，高度按原图 289×83 的比例自动算出来，
+         右侧文字块的高度也跟随它，所以“字与 Logo 始终同高”。 */
+  --logo-width: 220px;
+  --logo-height: calc(var(--logo-width) * 83 / 289);
   --shadow: 0 10px 30px rgba(25, 40, 52, 0.08);
 }
 
@@ -49,58 +67,188 @@ a:focus {
   text-decoration: underline;
 }
 
-/* ---------- Fixed header ---------- */
+/* ---------- Header（随页面滚动，不固定） ---------- */
 .site-header {
-  position: fixed;
-  inset: 0 0 auto 0;
+  position: relative; /* 原为 fixed 锁在顶部，现改为随页面一起向上滚走 */
   z-index: 1000;
-  height: var(--header-height);
+  /* 高度不用写：里面就是「横幅 + 导航条」两块，自动撑开 */
   background: var(--surface);
   box-shadow: 0 2px 14px rgba(20, 35, 46, 0.12);
 }
 
+/* 顶部横幅 —— 普通页面：一条深蓝横条，只放校徽和课题组名称。
+   主页那条带照片的横幅见下面 .hero-strip--home。 */
 .hero-strip {
   position: relative;
-  height: 112px;
-  background-image:
-    linear-gradient(rgba(22, 37, 49, 0.42), rgba(22, 37, 49, 0.42)),
-    url("../images/header-bg.jpg");
+  height: var(--hero-bar-height);
+  /* 主页那条照片轨道比横幅宽，超出的部分要裁掉 */
+  overflow: hidden;
+  background-color: #003366; /* 深蓝横条的颜色 */
+}
+
+/* 主页专用：高的照片横幅（配合 home.html 里的 class="hero-strip hero-strip--home"）。
+   照片由 main.js 生成轨道后左右滑动，见下面的 .hero-photos。 */
+.hero-strip--home {
+  height: var(--hero-height);
+  /* 横幅底图：assets/images/backend-01.jpg。
+     平时看到的其实是下面 .hero-photos 那条轨道在左右滑动，
+     这一层是「浏览器没开 JS」时的兜底，顺带让照片更早开始下载。
+     JS 一接管就把它关掉（见 main.js），免得滑动时从底下透出这一张。 */
+  background-image: url("../images/backend-01.jpg");
   background-size: cover;
-  background-position: center;
+  /* 【照片取景位置】center 62% = 横向居中、纵向偏下取景：
+     正好让照片里“厦门大学”四个金字完整落在横幅里（50% 会把字的下半截切掉），
+     上面留出的天空又刚好托住白色 Logo 和课题组名称。
+     想让画面整体上移（看到更多天空）就把 62% 调小，想更往下就调大。
+     注意：屏幕特别宽（>2000px）时横幅会变成一条很扁的窄带，
+     金字下沿可能又被切掉一点，这是 cover 缩放本身决定的，属正常现象。 */
+  background-position: center 62%;
+  background-repeat: no-repeat;
+}
+
+/* 压暗层：盖在照片上面，保证白色 Logo 和课题组名称看得清。
+   只在最上面那一截偏暗，往下很快淡到看不见，所以不会有明显的“渐变带”。
+   想让顶部更深就把第一个数调大，想更淡就调小（四个数一起收放）。 */
+.hero-strip--home::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    rgba(4, 24, 52, 0.46) 0%,
+    rgba(4, 24, 52, 0.28) 14%,
+    rgba(4, 24, 52, 0.13) 34%,
+    rgba(4, 24, 52, 0.04) 58%,
+    rgba(4, 24, 52, 0) 80%
+  );
+}
+
+/* 轮播轨道：由 main.js 按 BANNER_PHOTOS 生成，横向排开所有照片，
+   整体左右平移，就形成「左右滑动切换」。
+   轨道的宽度和 transform 都由 JS 设置，这里只管怎么摆。 */
+.hero-photos {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  display: flex;
+}
+
+/* 轨道里的每一张照片：宽度 = 一屏（100% 指的是横幅宽度），
+   flex-shrink 0 保证它不被挤窄，于是横向溢出，被 .hero-strip 裁掉。 */
+.hero-photo {
+  flex: 0 0 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center 62%; /* 和上面的取景位置保持一致 */
+  background-repeat: no-repeat;
+}
+
+/* 横幅最底下那排小圆点：几张照片就几个点，点哪个跳哪张。
+   点本身由 main.js 按 BANNER_PHOTOS 生成，这里只管长相。
+   注意压在照片层（z-index 0）和压暗层（z-index 1）上面。 */
+.hero-dots {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 16px;
+  z-index: 3;
+  display: flex;
+  justify-content: center;
+  gap: 9px;
+}
+
+.hero-dot {
+  /* 想调圆点大小：改这两个数（选中的那条会按比例变长，见下） */
+  width: 10px;
+  height: 10px;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  border-radius: 999px;
+  /* 半透明白：压在照片上也看得见，又不至于抢镜 */
+  background: rgba(255, 255, 255, 0.32);
+  /* 照片有亮有暗，加一点投影保证圆点不“失踪” */
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+  transition: width 0.3s ease, background-color 0.3s ease;
+}
+
+/* 当前正显示的那张：变成一条实心白横杠，一眼看出在第几张 */
+.hero-dot.is-active {
+  width: 26px;
+  background: #fff;
+}
+
+.hero-dot:hover {
+  background: rgba(255, 255, 255, 0.75);
+}
+
+.hero-dot:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
 }
 
 .hero-inner {
-  width: min(var(--max-width), calc(100% - 40px));
+  /* 压暗层和照片层都是绝对定位，这里抬一层，
+     保证 Logo 和课题组名称永远显示在照片上面。 */
+  position: relative;
+  z-index: 2;
+  /* 位置⑦【整体位置】：Logo 贴左上角、课题组名称贴右上角，
+     两侧留白由 --hero-pad-x / --hero-pad-y 控制。 */
+  width: 100%;
+  max-width: none;
   height: 100%;
-  margin: 0 auto;
+  margin: 0;
+  padding: var(--hero-pad-y) var(--hero-pad-x);
   display: flex;
-  align-items: center;
+  /* 位置①【上下】：flex-start 靠顶 / center 居中 / flex-end 靠底 */
+  align-items: flex-start;
+  /* 位置②【左右】：space-between = Logo 靠左、文字靠右（各行其位）
+                     flex-start / center / flex-end = 两者作为一组整体靠左/中/右 */
+  justify-content: space-between;
+  /* 位置③【Logo 与文字的横向间距】（space-between 下仅作最小间距生效） */
   gap: 20px;
 }
 
 .site-logo {
-  width: 82px;
-  height: 82px;
+  /* 透明背景 Logo（横宽图形 289×83）：按宽度缩放、高度自适应，
+     不设底色/内边距/阴影，直接叠在深蓝横幅上。 */
+  /* 大小①【Logo 宽度】：改 --logo-width（第 22 行）即可 */
+  width: var(--logo-width);
+  height: auto;
+  flex: 0 0 auto;
   object-fit: contain;
-  background: rgba(255, 255, 255, 0.96);
-  border-radius: 6px;
-  padding: 5px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.16);
+  /* 位置④【Logo 单独上下微调】：正数下移、负数上移，例如 6px */
+  /* margin-top: 0; */
 }
 
 .site-title-wrap {
   color: #fff;
   text-shadow: 0 1px 5px rgba(0, 0, 0, 0.35);
+  /* 课题组名称与副标题统一靠右上角对齐 */
+  text-align: right;
+  /* 字与 Logo 同高：文字块高度锁定为 Logo 高度，
+     主标题顶到上边、副标题贴到下边，上下边缘和 Logo 齐平。 */
+  height: var(--logo-height);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  /* 位置⑤【整块文字上下微调】：正数下移、负数上移 */
+  /* margin-top: 0; */
 }
 
 .site-title {
+  /* 位置⑥【文字与 Logo 的距离】上面 gap 已统一控制，此处可单独再调 */
   margin: 0;
+  /* 大小②【主标题字号】：clamp(最小值, 随窗口缩放, 最大值) */
   font-size: clamp(1.35rem, 2.2vw, 2.15rem);
   font-weight: 700;
   letter-spacing: 0.02em;
 }
 
 .site-subtitle {
+  /* 大小③【副标题字号】 */
   margin: 2px 0 0;
   font-family: Arial, Helvetica, sans-serif;
   font-size: 0.92rem;
@@ -108,7 +256,8 @@ a:focus {
 }
 
 .main-nav {
-  height: 56px;
+  /* 高度由 --nav-height 控制（见文件顶部第 17-23 行） */
+  height: var(--nav-height);
   background: rgba(255, 255, 255, 0.98);
   border-top: 1px solid rgba(255, 255, 255, 0.38);
 }
@@ -121,43 +270,258 @@ a:focus {
   align-items: stretch;
   overflow-x: auto;
   scrollbar-width: thin;
+  /* 左右留一点内边距：这里是个横向滚动容器，会把超出的部分直接裁掉，
+     而玻璃面板的阴影往外扩 16px，不留空隙的话最左边那个栏目会像被
+     切了一刀（看着像条分割线）。留出 20px 就裁不到了。 */
+  padding: 0 20px;
 }
 
 .nav-link {
   flex: 0 0 auto;
-  min-width: 118px;
-  padding: 0 16px;
+  /* 大小①【栏目最小宽度】：调大 = 每项更宽
+     （加了“主页”以后一共 7 个栏目，170px 在宽屏也放不下，
+       所以收小到 140px；再想加栏目就得继续收这个数） */
+  min-width: 140px;
+  /* 大小②【栏目之间的横向间距】：左右内边距，调大 = 整行更疏朗
+     （相邻两个栏目之间实际看到的空隙 = 这个值的两倍，现在是 64px） */
+  padding: 0 32px;
   display: inline-flex;
+  /* 竖排：中文在上、英文在下。只有一个子元素时仍然居中，不影响现有栏目。 */
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  line-height: 1.3;
   color: #31404c;
   font-family: Arial, Helvetica, sans-serif;
-  font-size: 0.95rem;
+  /* 大小③【导航栏字号】：中文与英文一起变（英文是 1em 跟随） */
+  font-size: 1.08rem;
   font-weight: 600;
   border-bottom: 3px solid transparent;
   text-decoration: none;
 }
 
+/* 导航栏里英文那一行：紧跟在中文下面。
+   （上下排列由 .nav-link 的 flex-direction: column 实现；
+     想让两行贴得更紧就改 .nav-link 里的 line-height）
+   悬停/当前栏目时和中文一起放大，见文件末尾“液态玻璃”一节） */
+.nav-link-en {
+  /* 大小④【英文行字号】：写死的值，改中文的 font-size 不会带动它 */
+  font-size: 0.95rem;
+  font-weight: inherit;
+  opacity: 1;
+}
+
+/* 悬停 / 当前栏目：不再画底部那条横线，改由下面的玻璃面板表示 */
 .nav-link:hover,
 .nav-link:focus,
 .nav-link.active {
   color: var(--brand);
-  border-bottom-color: var(--brand);
   text-decoration: none;
-  background: #f3f6f8;
 }
 
 /* ---------- Global page layout ---------- */
 .page-shell {
   width: min(var(--max-width), calc(100% - 40px));
   margin: 0 auto;
-  padding: calc(var(--header-height) + 34px) 0 64px;
+  /* 页头已不再是固定定位，无需再预留占位高度 */
+  padding: 34px 0 64px;
 }
 
+/* 主页的内容区：内容暂时还没填，先留出一屏高度，
+   免得页脚紧贴在导航条下面像页面坏了。以后内容多了自然会顶开。 */
+.page-shell--home {
+  min-height: 52vh;
+}
+
+/* ---------- 主页：论文期刊（一行横向滚动）----------
+   三层结构，缺一不可：
+     .journal-carousel  一行：[←箭头] [取景框] [→箭头]
+     .journal-marquee   取景框：overflow: hidden，只露出中间一截
+     .journal-track     长条轨道：11 张卡片横着排，由 main.js 每帧往左推
+   自动滚动、左右箭头、鼠标移上去暂停，逻辑都在 main.js 的「期刊封面滚动」。 */
+.journal-carousel {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.journal-marquee {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  /* 上下留白：卡片悬停时会往上浮 4px、投影有 30px 那么大，
+     不留白会被 overflow: hidden 切掉 */
+  padding: 20px 0;
+  /* 左右边缘做个渐隐，卡片进出时不会硬生生被切断 */
+  -webkit-mask-image: linear-gradient(to right,
+    transparent 0, #000 34px, #000 calc(100% - 34px), transparent 100%);
+  mask-image: linear-gradient(to right,
+    transparent 0, #000 34px, #000 calc(100% - 34px), transparent 100%);
+}
+
+.journal-track {
+  display: flex;
+  /* 卡片之间的间距（main.js 量格子宽度时也读这个值） */
+  gap: 22px;
+  /* 每帧都在动，提前告诉浏览器别反复重排 */
+  will-change: transform;
+}
+
+/* 每一格整块都是链接：上面封面、下面期刊名，点哪儿都能跳。
+   横向滚动里不换行，所以宽度写死、不许被压扁。 */
+.journal-card {
+  /* 封面宽度：想让封面更大/更小就改这个数，两边都不用动。
+     168px 是改成横向滚动之前那一版的大小，保持不变。 */
+  flex: 0 0 168px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  text-decoration: none;
+  transition: transform 0.18s ease;
+}
+
+.journal-card:hover {
+  transform: translateY(-4px);
+  text-decoration: none;
+}
+
+/* 左右两个箭头：圆按钮，点一下轨道滑一格 */
+.journal-arrow {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  font-family: inherit;
+  font-size: 1.25rem;
+  line-height: 1;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.18s ease, border-color 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.journal-arrow:hover {
+  transform: scale(1.08);
+  border-color: var(--brand-2);
+  box-shadow: var(--glass-shadow);
+}
+
+.journal-arrow:active {
+  transform: scale(0.94);
+}
+
+/* 封面：套一个 3:4 的框，11 张排出来才一样高。
+   原图本身就是 3:4 上下（实测 0.73~0.76），所以 cover 最多裁掉 1% 左右，
+   肉眼看不出来；想一点不裁就把 aspect-ratio 和 object-fit 删掉。 */
+.journal-cover {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  background: #eef2f4;
+  box-shadow: 0 6px 16px rgba(25, 40, 52, 0.13);
+  transition: box-shadow 0.18s ease;
+}
+
+.journal-card:hover .journal-cover {
+  box-shadow: 0 16px 32px rgba(25, 40, 52, 0.24);
+}
+
+/* 封面下面那行期刊名（字号、颜色都在这儿调） */
+.journal-name {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 0.84rem;
+  line-height: 1.35;
+  text-align: center;
+}
+
+/* ---------- 页面切换动画（整页滑动）----------
+   翻页时整页（横幅 + 导航 + 正文 + 页脚）当作一张纸一起滑，
+   所以下面每个选择器都写三遍 .site-header / .page-shell / .site-footer。
+
+   三种情况，由 main.js 判断后写到 <html> 的类上：
+     ① html.enter-up   / html.leave-up    主页 → 别的页面：向上滑走、从下方滑上来
+     ② html.enter-down / html.leave-down  别的页面 → 主页：向下滑走、从上方滑下来
+     ③ 不加任何类                          别的页面之间互跳：不播动画，直接切过去
+
+   想改手感就调下面四个 animation 里的【时间】和 keyframes 里的【translateY 距离】：
+   时间越大越慢越缓，距离越大滑得越远。 */
+html.enter-up .site-header,
+html.enter-up .page-shell,
+html.enter-up .site-footer {
+  /* 460ms 是滑动时长，后面是缓动曲线（先快后慢，收得柔和） */
+  animation: page-enter-up 460ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes page-enter-up {
+  from { opacity: 0; transform: translateY(40px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+html.enter-down .site-header,
+html.enter-down .page-shell,
+html.enter-down .site-footer {
+  animation: page-enter-down 460ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes page-enter-down {
+  from { opacity: 0; transform: translateY(-40px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* 退场：点完链接先滑走，滑完才真的跳转（main.js 里等动画结束） */
+html.leave-up .site-header,
+html.leave-up .page-shell,
+html.leave-up .site-footer {
+  /* 260ms：走得比进来快一点，衔接才顺 */
+  animation: page-leave-up 260ms cubic-bezier(0.4, 0, 0.9, 0.5) forwards;
+}
+
+@keyframes page-leave-up {
+  from { opacity: 1; transform: translateY(0); }
+  to   { opacity: 0; transform: translateY(-40px); }
+}
+
+html.leave-down .site-header,
+html.leave-down .page-shell,
+html.leave-down .site-footer {
+  animation: page-leave-down 260ms cubic-bezier(0.4, 0, 0.9, 0.5) forwards;
+}
+
+@keyframes page-leave-down {
+  from { opacity: 1; transform: translateY(0); }
+  to   { opacity: 0; transform: translateY(40px); }
+}
+
+/* 系统开了「减少动态效果」就不播这些动画，内容直接出现 */
+@media (prefers-reduced-motion: reduce) {
+  html.enter-up .site-header,
+  html.enter-up .page-shell,
+  html.enter-up .site-footer,
+  html.enter-down .site-header,
+  html.enter-down .page-shell,
+  html.enter-down .site-footer,
+  html.leave-up .site-header,
+  html.leave-up .page-shell,
+  html.leave-up .site-footer,
+  html.leave-down .site-header,
+  html.leave-down .page-shell,
+  html.leave-down .site-footer {
+    animation: none;
+  }
+}
+
+/* 页面大标题（Publications / 论文成果 那一行）的容器。
+   padding-bottom 原来是给下面那条 border-bottom 细线留位的，
+   线去掉后它就成了白留的空隙，所以一起去掉，只留 30px 的下边距。 */
 .page-heading {
   margin-bottom: 30px;
-  padding-bottom: 14px;
-  border-bottom: 1px solid var(--line);
 }
 
 .page-heading h1 {
@@ -167,11 +531,15 @@ a:focus {
   line-height: 1.25;
 }
 
+/* 原来大标题下面还有一行灰色小字（.page-heading p），已经全部删掉了，
+   这里对应的样式也一并去掉。以后哪个页面想再加回一行说明，
+   在 </h1> 后面写 <p>说明文字</p>，再把下面这段解开：
 .page-heading p {
   margin: 8px 0 0;
   color: var(--muted);
   font-family: Arial, Helvetica, sans-serif;
 }
+*/
 
 .section-title {
   margin: 42px 0 18px;
@@ -200,6 +568,39 @@ a:focus {
   gap: 20px;
 }
 
+/* 年份小标题：「2026」那一行，把论文按年分组。
+   格子之间本来就有 20px 的 gap，这里再用 margin 调整一下疏密：
+   上边多留一点（新一年和上一年的卡片拉开），下边少留一点（跟自己的论文贴紧）。 */
+.publication-year {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 22px 0 -6px;
+  color: var(--brand);
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+/* 年份右边那条横线：自动伸长到卡片右边缘，把每一年切开 */
+.publication-year::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--line);
+}
+
+/* 第一组（最新那年）紧跟着页面大标题，上边不要再顶开 */
+.publication-list > .publication-year:first-child {
+  margin-top: 0;
+}
+
+/* 翻页时这一年一篇都没显示，标题也一起藏起来 */
+.publication-year.is-hidden {
+  display: none;
+}
+
 .publication-item {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 250px;
@@ -208,6 +609,105 @@ a:focus {
   background: var(--surface);
   border: 1px solid var(--line);
   border-radius: 8px;
+}
+
+/* 分页时被隐藏的条目（.publication-item 是 grid，用类隐藏更可靠） */
+.publication-item.is-hidden {
+  display: none;
+}
+
+/* ---------- 论文分页（每页 10 篇） ---------- */
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  margin-top: 30px;
+}
+
+/* 只有一页时整块分页隐藏 */
+.pagination[hidden] {
+  display: none;
+}
+
+.page-btn {
+  font: inherit;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 0.95rem;
+  padding: 9px 22px;
+  color: var(--brand);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.page-btn:hover:not(:disabled) {
+  color: var(--brand-2);
+  border-color: var(--brand-2);
+  /* 液态玻璃：轻微放大 + 毛玻璃高光（变量定义在文件末尾的“液态玻璃”一节）。
+     底色同样用纯白玻璃，不跟导航栏/论文链接拉开差别 */
+  transform: translateY(-2px) scale(var(--glass-scale));
+  background: var(--glass-fill-plain);
+  border-color: rgba(255, 255, 255, 0.9);
+  box-shadow: var(--glass-shadow);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+  backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+}
+
+.page-btn:active:not(:disabled) {
+  transform: translateY(0) scale(0.985);
+}
+
+.page-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.page-status {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 0.92rem;
+  color: var(--muted);
+}
+
+/* “跳转到 __ 页” 一整组 */
+.page-jump {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 0.92rem;
+  color: var(--muted);
+}
+
+.page-input {
+  width: 68px;
+  padding: 7px 10px;
+  font: inherit;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 0.92rem;
+  color: var(--text);
+  text-align: center;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+}
+
+.page-input:focus {
+  outline: none;
+  border-color: var(--brand-2);
+}
+
+.page-btn-go {
+  padding: 7px 16px;
+}
+
+/* 窄屏下分页条允许换行，避免挤成一条 */
+@media (max-width: 640px) {
+  .pagination {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
 }
 
 .publication-meta {
@@ -235,13 +735,96 @@ a:focus {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+/* 论文的 DOI 链接：做成一颗可点的胶囊，悬停时有玻璃高光。
+   .link-pill 就是同一款胶囊，给别处想做成一样的链接用
+   （比如导师页的“教师主页”），在 <a> 上加个 class="link-pill" 即可。 */
+.publication-links a,
+.link-pill {
+  display: inline-block;
+  padding: 5px 14px;
+  color: var(--brand);
+  background: #f1f5f8;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+}
+
+.publication-links a:hover,
+.link-pill:hover,
+.link-pill:focus-visible {
+  transform: translateY(-1px) scale(var(--glass-scale));
+  /* 这里用纯白玻璃，不跟导航栏的 284 C 走 */
+  background: var(--glass-fill-plain);
+  border-color: rgba(255, 255, 255, 0.9);
+  box-shadow: var(--glass-shadow);
+  text-decoration: none;
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+  backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+}
+
+/* 论文配图：宽度占满所在的格子，高度按原图比例自动算，
+   也就是「等比例缩小」，不裁切、不拉伸。
+   （原来这里写死了 aspect-ratio: 4/3 + object-fit: cover，会把图裁成 4:3） */
 .publication-image {
   width: 100%;
-  aspect-ratio: 4 / 3;
-  object-fit: cover;
+  height: auto;
   border: 1px solid var(--line);
   border-radius: 5px;
   background: #eef2f4;
+}
+
+/* ---------- 点图片看大图（论文配图 / 导师照片 / 成员照片 通用） ----------
+   用法：把 <img> 套进 <button class="zoom-button" type="button" data-enlarge>
+   鼠标移上去图片在框里轻轻放大，点一下弹出大图（弹窗结构由 main.js 自动准备）。
+   边框、圆角、底色都挪到了外面这一层，所以放大时图片会被裁得整整齐齐。 */
+.zoom-button {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  background: #eef2f4;
+  overflow: hidden;
+  cursor: zoom-in;
+  transition: box-shadow var(--glass-speed) var(--glass-ease),
+    border-color var(--glass-speed) var(--glass-ease);
+}
+
+.zoom-button > img {
+  display: block;
+  width: 100%;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  transition: transform var(--glass-speed) var(--glass-ease);
+}
+
+/* 悬停 / 键盘聚焦：图片放大一点点（--glass-scale 想更夸张可以往上调） */
+.zoom-button:hover > img,
+.zoom-button:focus-visible > img {
+  transform: scale(1.06);
+}
+
+.zoom-button:hover,
+.zoom-button:focus-visible {
+  border-color: rgba(255, 255, 255, 0.9);
+  box-shadow: var(--glass-shadow);
+}
+
+/* 论文配图：右边这一格现在改成「按钮多高、图片就多高」。
+   align-self: start 让按钮别被 grid 拉伸到跟左边文字一样高，
+   否则图片（按原图比例缩完通常比文字矮）下面会空出一块灰底。
+   宽图（pub-03 之类 2.4:1 的）会明显变矮，这是不裁切的必然结果。 */
+.publication-item .zoom-button {
+  align-self: start;
+}
+
+.publication-item .zoom-button > img {
+  height: auto;
+}
+
+/* 导师照片原来圆角是 6px，这一层跟着走 */
+.advisor-overview .zoom-button {
+  border-radius: 6px;
 }
 
 /* ---------- Advisor ---------- */
@@ -255,14 +838,20 @@ a:focus {
 
 .advisor-photo {
   width: 100%;
-  aspect-ratio: 4 / 5;
+  /* 与 teacher_picture.png（305×428）同比例，照片不会被裁切。
+     换成别的比例的照片时，改这两个数字即可（或保留 cover，让它自动裁满）。 */
+  aspect-ratio: 5 / 7;
   object-fit: cover;
   border-radius: 6px;
   border: 1px solid var(--line);
 }
 
 .profile-name {
-  margin: 0 0 5px;
+  /* 标题行高比较大（1.75），字的上面会空出约 12px，
+     看着就比左边的照片低一截。这里把这截空隙抵消掉，
+     让“卢普顺”三个字的上沿和照片上沿齐平。
+     换字号后如果又不齐了，量一下差值改这个数即可。 */
+  margin: -12px 0 5px;
   color: var(--brand);
   font-size: 2rem;
 }
@@ -272,6 +861,12 @@ a:focus {
   color: var(--muted);
   font-family: Arial, Helvetica, sans-serif;
   font-weight: 600;
+}
+
+/* 简介里的研究方向编号列表：贴着“研究方向：”那一行，缩进小一些 */
+.profile-list {
+  margin: 0 0 4px;
+  padding-left: 1.6em;
 }
 
 .cv-section {
@@ -291,6 +886,35 @@ a:focus {
 .cv-block h3 {
   margin-bottom: 8px;
   color: #3d5464;
+}
+
+.cv-block p {
+  margin: 0;
+}
+
+/* 简历里“年份 + 内容”两栏对齐的时间线（工作经历 / 教育经历 / 荣誉） */
+.cv-timeline {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cv-timeline li {
+  display: grid;
+  /* 左边一栏放时间，右边一栏放内容：想让时间栏更宽就调大 150px */
+  grid-template-columns: 150px minmax(0, 1fr);
+  gap: 14px;
+  padding: 7px 0;
+}
+
+.cv-timeline li + li {
+  border-top: 1px dashed var(--line);
+}
+
+.cv-date {
+  color: var(--muted);
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 0.94rem;
 }
 
 /* ---------- Members ---------- */
@@ -333,6 +957,17 @@ a:focus {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+/* 成员的研究方向：名字底下那行小字（字号、颜色都在这儿调） */
+.member-research {
+  margin: 0;
+  font-size: 0.98rem;
+}
+
+.member-research strong {
+  color: var(--muted);
+  font-weight: 600;
+}
+
 /* ---------- Patents ---------- */
 .patent-list {
   display: grid;
@@ -367,17 +1002,25 @@ a:focus {
   gap: 16px;
 }
 
+/* 新闻卡片：整张都能点。做法是让标题里那个链接铺满整张卡片
+   （见下面 .news-title a::after），所以点标题、日期、正文哪一处都进详情页。
+   position: relative 是给那层“铺满”当定位基准的，别删。 */
 .news-item {
+  position: relative;
   padding: 22px 24px;
   background: var(--surface);
   border: 1px solid var(--line);
   border-radius: 8px;
-  transition: transform 0.18s ease, box-shadow 0.18s ease;
+  transition: transform 0.18s ease, box-shadow 0.18s ease,
+    border-color 0.18s ease;
 }
 
+/* 鼠标移上去：整张卡片轻轻浮起、边框颜色加深一点，表示“这里可以点”。
+   想要完全不做悬停效果，把这一整块删掉即可。 */
 .news-item:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow);
+  transform: translateY(-3px);
+  box-shadow: 0 16px 34px rgba(24, 45, 66, 0.16);
+  border-color: rgba(48, 72, 91, 0.32);
 }
 
 .news-title {
@@ -418,14 +1061,24 @@ a:focus {
 }
 
 /* ---------- Equipment ---------- */
+/* 一行排几张，就看下面 repeat(4, …) 里的数字（4 = 一行四台）。
+   窄屏（≤860px）会自动变成两列，见文件下半部分的 @media。 */
 .equipment-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 22px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
 }
 
 .equipment-card {
   overflow: hidden;
+  transition: transform var(--glass-speed) var(--glass-ease),
+              box-shadow var(--glass-speed) var(--glass-ease);
+}
+
+/* 鼠标移到仪器图片上：整张卡片轻微抬起，图片在框内顺滑放大 */
+.equipment-card:hover {
+  transform: translateY(-3px) scale(1.008);
+  box-shadow: 0 18px 38px rgba(24, 45, 66, 0.18);
 }
 
 .equipment-image-button {
@@ -437,25 +1090,34 @@ a:focus {
   background: transparent;
 }
 
+/* 仪器照片：框统一成 4:3，图整张放进去、不裁切。
+   现在 6 张里 equipment-02~06 本来就是 4:3，正好铺满一格；
+   equipment-01 是竖幅（1280x1707），会在左右各留一条浅灰边——
+   这是「不裁切」的代价，总比把整台柜子裁成一条横条强。
+   以前这里是 16/10 + object-fit: cover，会把竖幅照片裁得只剩中间一横条。 */
 .equipment-image {
   width: 100%;
-  aspect-ratio: 16 / 10;
-  object-fit: cover;
+  aspect-ratio: 4 / 3;
+  object-fit: contain;
+  background: #eef2f4;
   border-bottom: 1px solid var(--line);
+  transition: transform var(--glass-speed) var(--glass-ease);
 }
 
-.equipment-content {
-  padding: 20px 22px 24px;
+.equipment-image-button:hover .equipment-image,
+.equipment-image-button:focus-visible .equipment-image {
+  transform: scale(1.05);
 }
 
-.equipment-content h2 {
-  margin: 0 0 10px;
-  color: var(--brand);
-}
-
-.equipment-specs {
+/* 图片下面那行仪器名称 —— 整张卡片就这一处文字。
+   卡片里已经没有功能/参数/应用场景那些介绍了，只剩名字。
+   字号想让名字大一点小一点，改下面的 font-size。 */
+.equipment-name {
   margin: 0;
-  padding-left: 20px;
+  padding: 13px 12px 15px;
+  font-size: 1.02rem;
+  line-height: 1.35;
+  text-align: center;
 }
 
 /* ---------- Image modal ---------- */
@@ -527,30 +1189,215 @@ a:focus {
   line-height: 1;
 }
 
+/* =========================================================
+   液态玻璃交互：鼠标移到“可点击”的地方时的反馈
+   —— 手感统一由下面这组变量控制，想整体调整只改这里。
+   ========================================================= */
+:root {
+  --glass-scale: 1.06;   /* 放大倍数：1 = 不放大；想更夸张可以到 1.08 */
+  --glass-speed: 0.36s;  /* 过渡时长：越大越慢、越顺滑 */
+  --glass-ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --glass-blur: 16px;    /* 毛玻璃模糊强度 */
+  /* 玻璃主色：Pantone 284 C（#6C9AC3），靠透明度做出通透感 */
+  --glass-tint: 108, 154, 195;
+  /* 玻璃表面的高光渐变 */
+  --glass-fill: linear-gradient(
+    135deg,
+    rgba(var(--glass-tint), 0.52) 0%,
+    rgba(var(--glass-tint), 0.3) 45%,
+    rgba(var(--glass-tint), 0.56) 100%
+  );
+  /* 纯白玻璃：导航栏（论文成果 / 导师简介 那一行）和论文 DOI 胶囊都用它 */
+  --glass-fill-plain: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.99) 0%,
+    rgba(255, 255, 255, 0.72) 45%,
+    rgba(255, 255, 255, 0.94) 100%
+  );
+  /* 玻璃的外阴影 + 上下两条白色高光棱边 */
+  --glass-shadow:
+    0 16px 32px rgba(40, 74, 108, 0.22),
+    0 2px 8px rgba(40, 74, 108, 0.12),
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.85),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.4);
+}
+
+/* 所有可点击处共用同一条缓动曲线 */
+.nav-link,
+.page-btn,
+.news-item,
+.news-title a,
+.publication-links a,
+.link-pill,
+.equipment-card,
+.equipment-image {
+  transition: transform var(--glass-speed) var(--glass-ease),
+    box-shadow var(--glass-speed) var(--glass-ease),
+    background-color var(--glass-speed) var(--glass-ease),
+    border-color var(--glass-speed) var(--glass-ease),
+    color var(--glass-speed) var(--glass-ease);
+}
+
+/* 导航栏目：玻璃面板比栏目略小一圈，放大后仍在导航条内，不会被裁切 */
+.nav-link {
+  position: relative;
+  z-index: 0; /* 建立层叠上下文，让玻璃层落在文字下面 */
+}
+
+.nav-link::before {
+  content: "";
+  position: absolute;
+  inset: var(--nav-pad-y) 6px;
+  z-index: -1;
+  border-radius: 12px;
+  opacity: 0;
+  transform: scale(0.9);
+  transition: opacity var(--glass-speed) var(--glass-ease),
+    transform var(--glass-speed) var(--glass-ease),
+    box-shadow var(--glass-speed) var(--glass-ease);
+}
+
+/* 当前所在栏目：常驻一块玻璃底，代替原来的下划线 */
+.nav-link.active::before {
+  opacity: 1;
+  transform: scale(1);
+  background: var(--glass-fill-plain);
+  box-shadow: var(--glass-shadow);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+  backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+}
+
+/* 鼠标移上去 / 键盘聚焦 / 按下：跟论文 DOI 胶囊完全一样的手感——
+   纯白玻璃底 + 轻轻上浮放大一点点 */
+.nav-link:hover::before,
+.nav-link:focus-visible::before,
+.nav-link:active::before {
+  opacity: 1;
+  transform: translateY(-1px) scale(var(--glass-scale));
+  background: var(--glass-fill-plain);
+  box-shadow: var(--glass-shadow);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+  backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+}
+
+/* 悬停 / 按下时，文字跟着一起放大；当前所在栏目则一直保持放大，
+   直到切到别的页面才恢复。
+   用 transform 而不是改 font-size：transform 不参与排版，
+   放大时不会把旁边的栏目挤开，整行也不会抖。 */
+.nav-link-text,
+.nav-link-en {
+  display: inline-block;
+  transition: transform var(--glass-speed) var(--glass-ease);
+}
+
+.nav-link:hover .nav-link-text,
+.nav-link:hover .nav-link-en,
+.nav-link:focus-visible .nav-link-text,
+.nav-link:focus-visible .nav-link-en,
+.nav-link:active .nav-link-text,
+.nav-link:active .nav-link-en,
+.nav-link.active .nav-link-text,
+.nav-link.active .nav-link-en {
+  transform: scale(1.12); /* 放大倍数：想让字更夸张就调大 */
+}
+
+/* 新闻标题的链接：下面那层 ::after 被拉满整张卡片，
+   于是整张卡片都成了这个链接的点击区域。
+   卡片的位置由 .news-item 上的 position: relative 提供。 */
+.news-title a {
+  display: inline-block;
+}
+
+.news-title a::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 8px; /* 跟卡片圆角对齐 */
+}
+
+/* 正文里的行内链接（邮箱、页内跳转等）：行内元素放大容易错位，
+   这里只加一层淡淡的玻璃底色，不做放大。
+   （.publication-links 和 .link-pill 是胶囊按钮，见上面的规则，不走这里） */
+.page-shell p:not(.publication-links) a:not(.link-pill),
+.page-shell li a:not(.link-pill),
+.breadcrumb a:not(.link-pill) {
+  padding: 2px 6px;
+  margin: -2px -6px;
+  border-radius: 6px;
+}
+
+.page-shell p:not(.publication-links) a:not(.link-pill):hover,
+.page-shell li a:not(.link-pill):hover,
+.breadcrumb a:not(.link-pill):hover {
+  background: var(--glass-fill);
+  box-shadow: var(--glass-shadow);
+  text-decoration: none;
+}
+
+/* 系统开启了“减少动态效果”时，去掉缩放，只保留颜色变化 */
+@media (prefers-reduced-motion: reduce) {
+  .nav-link::before,
+  .page-btn,
+  .news-item,
+  .news-title a,
+  .publication-links a,
+  .link-pill,
+  .equipment-card,
+  .equipment-image,
+  .zoom-button > img {
+    transition-duration: 0.01s;
+  }
+
+  .nav-link:hover::before,
+  .page-btn:hover:not(:disabled),
+  .news-item:hover,
+  .news-title a:hover,
+  .equipment-card:hover,
+  .equipment-image-button:hover .equipment-image,
+  .zoom-button:hover > img,
+  .zoom-button:focus-visible > img,
+  .publication-links a:hover,
+  .link-pill:hover,
+  .link-pill:focus-visible,
+  .nav-link:hover .nav-link-text,
+  .nav-link:hover .nav-link-en,
+  .nav-link.active .nav-link-text,
+  .nav-link.active .nav-link-en {
+    transform: none;
+  }
+}
+
 /* ---------- Responsive ---------- */
+/* 中等宽度：栏目间距收一点，避免这一行放不下而要左右滚动 */
+@media (max-width: 1100px) {
+  .nav-link {
+    min-width: 124px;
+    padding: 0 20px;
+  }
+}
+
 @media (max-width: 860px) {
   :root {
-    --header-height: 154px;
-  }
-
-  .hero-strip {
-    height: 98px;
-  }
-
-  .site-logo {
-    width: 66px;
-    height: 66px;
-  }
-
-  .main-nav {
-    height: 56px;
+    /* 窄屏：主页照片横幅高度 */
+    --hero-height: 300px;
+    /* 窄屏：其它页面深蓝横条高度 */
+    --hero-bar-height: 100px;
+    /* 窄屏 Logo 宽度（文字块高度会自动跟随） */
+    --logo-width: 170px;
+    /* 窄屏导航条高度（上下间距略收一点） */
+    --nav-height: 70px;
   }
 
   .publication-item,
   .advisor-overview,
-  .member-item,
-  .equipment-grid {
+  .member-item {
     grid-template-columns: 1fr;
+  }
+
+  /* 窄屏：仪器一行四台太挤了，改成两列 */
+  .equipment-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
   }
 
   .publication-image {
@@ -561,37 +1408,70 @@ a:focus {
   .member-photo {
     max-width: 260px;
   }
+
+  /* 窄屏是单列：照片在上面、文字在下面，这时不需要抵消标题上方的空隙 */
+  .profile-name {
+    margin-top: 0;
+  }
+
+  /* 窄屏下单列排列，限制宽度的对象改成外面那层按钮，图片才跟着一起收窄 */
+  .publication-item .zoom-button {
+    max-width: 440px;
+  }
+
+  .advisor-overview .zoom-button,
+  .member-item .zoom-button {
+    max-width: 260px;
+  }
 }
 
 @media (max-width: 560px) {
   :root {
-    --header-height: 146px;
+    /* 手机屏：主页照片横幅高度 */
+    --hero-height: 210px;
+    /* 手机屏：其它页面深蓝横条高度 */
+    --hero-bar-height: 86px;
+    /* 手机屏留白小一些 */
+    --hero-pad-x: 10px;
+    --hero-pad-y: 14px;
+    /* 手机屏 Logo 宽度（文字块高度会自动跟随） */
+    --logo-width: 132px;
+    /* 手机屏导航条高度 */
+    --nav-height: 66px;
+    --nav-pad-y: 8px;
   }
 
-  .hero-strip {
-    height: 90px;
-  }
-
-  .hero-inner,
+  /* 横幅仍保持通栏、贴左上角（不加入下面的居中容器组） */
   .nav-inner,
   .page-shell,
   .footer-inner {
     width: min(100% - 24px, var(--max-width));
   }
 
-  .site-logo {
-    width: 58px;
-    height: 58px;
-  }
-
   .site-subtitle {
     display: none;
   }
 
+  /* 手机屏：横幅矮了，圆点跟着往里收、个头也小一点 */
+  .hero-dots {
+    bottom: 10px;
+    gap: 7px;
+  }
+
+  .hero-dot {
+    width: 8px;
+    height: 8px;
+  }
+
+  .hero-dot.is-active {
+    width: 20px;
+  }
+
   .nav-link {
-    min-width: 104px;
-    padding: 0 12px;
-    font-size: 0.88rem;
+    /* 手机屏的对应值，比桌面小一些 */
+    min-width: 124px;
+    padding: 0 18px;
+    font-size: 1rem;
   }
 
   .publication-item,
@@ -603,4 +1483,63 @@ a:focus {
   .news-item {
     padding: 18px;
   }
+
+  /* 手机屏：年份小标题小一号 */
+  .publication-year {
+    font-size: 1.25rem;
+  }
+
+  /* 手机屏：封面和箭头都小一号 */
+  .journal-track {
+    gap: 16px;
+  }
+
+  .journal-card {
+    flex-basis: 138px;
+  }
+
+  .journal-arrow {
+    width: 36px;
+    height: 36px;
+    font-size: 1.05rem;
+  }
+
+  .journal-carousel {
+    gap: 8px;
+  }
+
+  /* 手机屏：仪器还是两列，间距和名字都收小一点 */
+  .equipment-grid {
+    gap: 12px;
+  }
+
+  .equipment-name {
+    padding: 10px 6px 12px;
+    font-size: 0.92rem;
+  }
+
+  /* 手机屏：简历时间线改为上下两行，避免左栏挤掉内容 */
+  .cv-timeline li {
+    grid-template-columns: 1fr;
+    gap: 2px;
+  }
+}
+
+/* =========================================================
+   文字颜色：除最上方深蓝横幅里的文字外，全站文字一律纯黑
+   —— 放在文件最后并用 !important，压过上面所有配色设置。
+     只想改回某处原来的颜色，把该处从下面的选择器里挪出去即可。
+   ========================================================= */
+.page-shell,
+.page-shell *,
+.main-nav,
+.main-nav *,
+.site-footer,
+.site-footer * {
+  color: #000 !important;
+}
+
+/* 例外：设备放大弹窗在深色遮罩上，关闭按钮保持白色 */
+.image-modal-close {
+  color: #fff !important;
 }
