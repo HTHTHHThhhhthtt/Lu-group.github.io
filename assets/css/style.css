@@ -14,7 +14,7 @@
   --accent: #8b5e3c;
   --max-width: 1180px;
   /* ↓↓↓ 【横幅高度】顶部横幅分两种，高度也分两个（导航条高度另算）：
-         ① 主页（home.html）：放照片轮播的高横幅 —— 看 --hero-height
+         ① 主页（index.html）：放照片轮播的高横幅 —— 看 --hero-height
          ② 其它页面：只有一条深蓝横条，放校徽和课题组名称 —— 看 --hero-bar-height
          窄屏（≤860px）和手机屏（≤560px）各有一套值，
          见文件下半部分那两个 @media，想让各屏一致就一起改。 */
@@ -86,7 +86,7 @@ a:focus {
   background-color: #003366; /* 深蓝横条的颜色 */
 }
 
-/* 主页专用：高的照片横幅（配合 home.html 里的 class="hero-strip hero-strip--home"）。
+/* 主页专用：高的照片横幅（配合 index.html 里的 class="hero-strip hero-strip--home"）。
    照片由 main.js 生成轨道后左右滑动，见下面的 .hero-photos。 */
 .hero-strip--home {
   height: var(--hero-height);

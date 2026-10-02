@@ -241,7 +241,7 @@
   var reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   // 主页是哪一页：认导航里带 data-nav-home 的那个链接的 href
-  // （以后把 home.html 改名成 index.html，只要改链接，这里自动跟着走）
+  // （主页现在就叫 index.html，也就是站点入口；这条逻辑只认链接，改名也不怕）
   var homeLink = document.querySelector("[data-nav-home]");
   var homeFile = homeLink ? homeLink.getAttribute("href") || "" : "";
   var currentIsHome = !!document.querySelector(".hero-strip--home");

@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="课题组论文成果展示">
+  <title>Publications | Research Group</title>
+  <link rel="stylesheet" href="./assets/css/style.css">
+  <!-- 翻页动画的“接棒”脚本：上一页在 sessionStorage 里留了 up / down，
+       这里赶在页面画出来之前把类加到 <html> 上，新页面才能接着滑进来。
+       没有留值（直接打开网址、刷新、从别的站过来）就不播进场动画。
+       规则见 assets/js/main.js 和 style.css 的「页面切换动画」一段。 -->
+  <script>
+    (function () {
+      var dir = null;
+      try { dir = sessionStorage.getItem("pageTransition"); } catch (e) {}
+      if (dir === "up" || dir === "down") {
+        document.documentElement.classList.add("enter-" + dir);
+      }
+      try { sessionStorage.removeItem("pageTransition"); } catch (e) {}
+    })();
+  </script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="hero-strip">
+      <div class="hero-inner">
+        <!-- 图片替换：assets/images/logo.png -->
+        <img class="site-logo" src="./assets/images/logo.png" alt="课题组 Logo">
+        <div class="site-title-wrap">
+          <!-- 文字替换：课题组名称 -->
+          <p class="site-title">卢普顺课题组 / Pushun Lu Group</p>
+          <p class="site-subtitle">Xiamen University / College of Physical Science and Technology</p>
+        </div>
+      </div>
+    </div>
+    <nav class="main-nav" aria-label="主导航">
+      <div class="nav-inner">
+        <a class="nav-link " data-nav-home href="./index.html"><span class="nav-link-text">主页</span><span class="nav-link-en">Home</span></a>
+        <a class="nav-link active" href="./publications.html"><span class="nav-link-text">论文成果</span><span class="nav-link-en">Publications</span></a>
+        <a class="nav-link " href="./advisor.html"><span class="nav-link-text">导师简介</span><span class="nav-link-en">Principal Investigator</span></a>
+        <a class="nav-link " href="./members.html"><span class="nav-link-text">课题组成员</span><span class="nav-link-en">Members</span></a>
+        <a class="nav-link " href="./patents.html"><span class="nav-link-text">专利成果</span><span class="nav-link-en">Patents</span></a>
+        <a class="nav-link " href="./news.html"><span class="nav-link-text">课题组新闻</span><span class="nav-link-en">News</span></a>
+        <a class="nav-link " href="./equipment.html"><span class="nav-link-text">实验室仪器</span><span class="nav-link-en">Facilities</span></a>
+      </div>
+    </nav>
+  </header>
+  <main class="page-shell">
+    <section class="page-heading">
+      <h1>Publications / 论文成果</h1>
+    </section>
+    <section class="publication-list" aria-label="论文列表">
+      <!-- 说明：按年份从新到旧排列，每一年用一条
+           <h2 class="publication-year">2026</h2> 开头，它在页面上就是「2026」那行小标题。
+           新增一年时：先照抄一条年份标题，再把这一年的论文排在它下面；
+           翻页代码靠「上一篇论文往上找最近的年份标题」来分组，所以顺序别打乱。
+           年份标题的疏密、字号在 style.css 的 .publication-year 里调。
+           图片文件名 pub-01 ~ pub-12 对应下面 12 篇，
+
+           把图片放进 assets/images/publications/ 覆盖同名文件即可。
+           图片外面那层 <button class="zoom-button" data-enlarge> 负责“点一下看大图”
+           （鼠标移上去还会在框内轻轻放大），换图时只改里面的 src，按钮不要删。
+           每篇的 DOI 链接放在作者下面那一行（publication-links），新增论文时照抄：
+           <p class="publication-links"><a href="https://doi.org/真实DOI" target="_blank" rel="noopener">原文链接：DOI: 10.xxxx/xxxx</a></p> -->
+
+      <!-- ==================== 2026 ==================== -->
+      <h2 class="publication-year">2026</h2>
+      <article class="publication-item">
+        <div>
+          <div class="publication-meta">Nature Communications · 2026 · 17, 5495</div>
+          <h3 class="publication-title">Unraveling the foreign-cation effect in UCl3-type halide solid electrolytes for low-temperature all-solid-state batteries</h3>
+          <p class="publication-authors"><strong>Pushun Lu#</strong>, Zhimin Zhou#, Shiyue Cao#, Jiamin Fu, Weiping Li, Kaiyong Tuo, Suze Liang, Jian Hong, Jiuwei Lei, Jiaxu Zhang, Ziqing Wang, Shutao Zhang, Guantai Hu, Chao Wang, Tingting Liu, Suting Weng, Wei Xia, Xuefeng Wang, Xueliang Sun*, Changhong Wang*.</p>
+          <p class="publication-links"><a href="https://doi.org/10.1038/s41467-026-70621-x" target="_blank" rel="noopener">原文链接：DOI: 10.1038/s41467-026-70621-x</a></p>
+        </div>
+        <!-- 图片替换：assets/images/publications/pub-01.jpg -->
+        <button class="zoom-button" type="button" data-enlarge aria-label="放大查看论文配图 1">
+          <img class="publication-image" src="./assets/images/publications/pub-01.jpg" alt="论文图文摘要 1">
+        </button>
+      </article>
+
+      <article class="publication-item">
+        <div>
+          <div class="publication-meta">Advanced Materials · 2026 · 38: e72694</div>
+          <h3 class="publication-title">Embedding Fe-based redox chemistry into low-cost oxyhalide solid electrolytes for high-performance all-solid-state batteries</h3>
+          <p class="publication-authors">Zhimin Zhou#, <strong>Pushun Lu#</strong>, Suzhe Liang, Kaiyong Tuo, Jiamin Fu, Shengjie Xia, Yilin Chen, Zhiyun Wu, Jiaxu Zhang, Ziqing Wang, Shutao Zhang, Guantai Hu, Jian Hong, Mengfei Zhu, Chao Wang, Tingting Liu, Mingfeng Wei, Wei Xia, Liwei Chen*, Xueliang Sun*, Changhong Wang*.</p>
+          <p class="publication-links"><a href="https://doi.org/10.1002/adma.72694" target="_blank" rel="noopener">原文链接：DOI: 10.1002/adma.72694</a></p>
+        </div>
+        <!-- 图片替换：assets/images/publications/pub-02.jpg -->
+        <button class="zoom-button" type="button" data-enlarge aria-label="放大查看论文配图 2">
+          <img class="publication-image" src="./assets/images/publications/pub-02.jpg" alt="论文图文摘要 2">
+        </button>
+      </article>
+
+      <!-- ==================== 2025 ==================== -->
+      <h2 class="publication-year">2025</h2>
+      <article class="publication-item">
+        <div>
+          <div class="publication-meta">Nano Letters · 2025 · 25, 5997-6004</div>
+          <h3 class="publication-title">&ldquo;Oxygen into sulfur&rdquo; - new synthesis of sulfide solid electrolyte by oxygenophilic boron</h3>
+          <p class="publication-authors">Xiang Zhu#, <strong>Pushun Lu#</strong>, Yujing Wu, Weitao He, Qifa Gao, Tenghuan Ma, Ming Yang, Liquan Chen, Hong Li, Fan Wu*.</p>
+          <p class="publication-links"><a href="https://doi.org/10.1021/acs.nanolett.4c03750" target="_blank" rel="noopener">原文链接：DOI: 10.1021/acs.nanolett.4c03750</a></p>
+        </div>
+        <!-- 图片替换：assets/images/publications/pub-03.jpg -->
+        <button class="zoom-button" type="button" data-enlarge aria-label="放大查看论文配图 3">
+          <img class="publication-image" src="./assets/images/publications/pub-03.jpg" alt="论文图文摘要 3">
+        </button>
+      </article>
+
+      <!-- ==================== 2024 ==================== -->
+      <h2 class="publication-year">2024</h2>
+      <article class="publication-item">
+        <div>
+          <div class="publication-meta">Joule · 2024 · 8, 635-657</div>
+          <h3 class="publication-title">Materials and chemistry design for low-temperature all-solid-state batteries</h3>
+          <p class="publication-authors"><strong>Pushun Lu</strong>, Zhimin Zhou, Zuxiang Xiao, Jiaze Lu, Jiaxu Zhang, Guantai Hu, Wenlin Yan, Shengjie Xia, Shutao Zhang, Ziqing Wang, Hong Li, Changhong Wang*, Fan Wu*, Xueliang Sun*.</p>
+          <p class="publication-links"><a href="https://doi.org/10.1016/j.joule.2024.01.027" target="_blank" rel="noopener">原文链接：DOI: 10.1016/j.joule.2024.01.027</a></p>
+        </div>
+        <!-- 图片替换：assets/images/publications/pub-04.jpg -->
+        <button class="zoom-button" type="button" data-enlarge aria-label="放大查看论文配图 4">
+          <img class="publication-image" src="./assets/images/publications/pub-04.jpg" alt="论文图文摘要 4">
+        </button>
+      </article>
+
+      <article class="publication-item">
+        <div>
+          <div class="publication-meta">Energy Storage Materials · 2024 · 67, 103316</div>
+          <h3 class="publication-title">Rate-limiting mechanism of all-solid-state battery unravelled by low-temperature test-analysis flow</h3>
+          <p class="publication-authors"><strong>Pushun Lu</strong>, Yujing Wu, Dengxu Wu, Fengmei Song, Tenghuan Ma, Wenlin Yan, Xiang Zhu, Fuliang Guo, Jiaze Lu, Jian Peng, Liquan Chen, Hong Li, Fan Wu*.</p>
+          <p class="publication-links"><a href="https://doi.org/10.1016/j.ensm.2024.103316" target="_blank" rel="noopener">原文链接：DOI: 10.1016/j.ensm.2024.103316</a></p>
+        </div>
+        <!-- 图片替换：assets/images/publications/pub-05.jpg -->
+        <button class="zoom-button" type="button" data-enlarge aria-label="放大查看论文配图 5">
+          <img class="publication-image" src="./assets/images/publications/pub-05.jpg" alt="论文图文摘要 5">
+        </button>
+      </article>
+
+      <article class="publication-item">
+        <div>
+          <div class="publication-meta">ACS Nano · 2024 · 18, 7334-7345</div>
+          <h3 class="publication-title">Superior low-temperature all-solid-state battery enabled by high-ionic-conductivity and low-energy-barrier interface</h3>
+          <p class="publication-authors"><strong>Pushun Lu#</strong>, Sheng Gong#, Chuhong Wang, Zhiao Yu, Yuli Huang, Tenghuan Ma, Jingchen Lian, Zhiwen Jiang, Liquan Chen, Hong Li, Fan Wu*.</p>
+          <p class="publication-links"><a href="https://doi.org/10.1021/acsnano.3c07023" target="_blank" rel="noopener">原文链接：DOI: 10.1021/acsnano.3c07023</a></p>
+        </div>
+        <!-- 图片替换：assets/images/publications/pub-06.jpg -->
+        <button class="zoom-button" type="button" data-enlarge aria-label="放大查看论文配图 6">
+          <img class="publication-image" src="./assets/images/publications/pub-06.jpg" alt="论文图文摘要 6">
+        </button>
+      </article>
+
+      <article class="publication-item">
+        <div>
+          <div class="publication-meta">ACS Energy Letters · 2024 · 9, 1043-1052</div>
+          <h3 class="publication-title">Superionic conductivity invoked by enhanced correlation migration in lithium halides solid electrolytes</h3>
+          <p class="publication-authors">Rui Li#, <strong>Pushun Lu#</strong>, Xinmiao Liang#, Liwei Liu, Maxim Avdeev, Zhi Deng, Shuai Li, Kaiqi Xu, Jiwen Feng, Rui Si, Fan Wu*, Zhizhen Zhang*, Yong-Sheng Hu*.</p>
+          <p class="publication-links"><a href="https://doi.org/10.1021/acsenergylett.3c02496" target="_blank" rel="noopener">原文链接：DOI: 10.1021/acsenergylett.3c02496</a></p>
+        </div>
+        <!-- 图片替换：assets/images/publications/pub-07.jpg -->
+        <button class="zoom-button" type="button" data-enlarge aria-label="放大查看论文配图 7">
+          <img class="publication-image" src="./assets/images/publications/pub-07.jpg" alt="论文图文摘要 7">
+        </button>
+      </article>
+
+      <!-- ==================== 2023 ==================== -->
+      <h2 class="publication-year">2023</h2>
+      <article class="publication-item">
+        <div>
+          <div class="publication-meta">Nature Communications · 2023 · 14, 4077</div>
+          <h3 class="publication-title">Realizing long-cycling all-solid-state Li-In||TiS2 batteries using Li6+xMxAs1-xS5I (M=Si, Sn) sulfide solid electrolytes</h3>
+          <p class="publication-authors"><strong>Pushun Lu</strong>, Yu Xia, Guochen Sun, Dengxu Wu, Siyuan Wu, Wenlin Yan, Xiang Zhu, Jiaze Lu, Quanhai Niu, Shaochen Shi, Zhengju Sha, Liquan Chen, Hong Li*, Fan Wu*.</p>
+          <p class="publication-links"><a href="https://doi.org/10.1038/s41467-023-39686-w" target="_blank" rel="noopener">原文链接：DOI: 10.1038/s41467-023-39686-w</a></p>
+        </div>
+        <!-- 图片替换：assets/images/publications/pub-08.jpg -->
+        <button class="zoom-button" type="button" data-enlarge aria-label="放大查看论文配图 8">
+          <img class="publication-image" src="./assets/images/publications/pub-08.jpg" alt="论文图文摘要 8">
+        </button>
+      </article>
+
+      <article class="publication-item">
+        <div>
+          <div class="publication-meta">Advanced Functional Materials · 2023 · 33(8): 2211211</div>
+          <h3 class="publication-title">Wide-temperature, long-cycling, and high-loading pyrite all-solid-state batteries enabled by argyrodite thioarsenate superionic conductor</h3>
+          <p class="publication-authors"><strong>Pushun Lu</strong>, Yu Xia, Yuli Huang, Zhendong Li, Yujing Wu, Xue Wang, Guochen Sun, Shaochen Shi, Zhengju Sha, Liquan Chen, Hong Li, Fan Wu*.</p>
+          <p class="publication-links"><a href="https://doi.org/10.1002/adfm.202211211" target="_blank" rel="noopener">原文链接：DOI: 10.1002/adfm.202211211</a></p>
+        </div>
+        <!-- 图片替换：assets/images/publications/pub-09.jpg -->
+        <button class="zoom-button" type="button" data-enlarge aria-label="放大查看论文配图 9">
+          <img class="publication-image" src="./assets/images/publications/pub-09.jpg" alt="论文图文摘要 9">
+        </button>
+      </article>
+
+      <article class="publication-item">
+        <div>
+          <div class="publication-meta">Nano Energy · 2023 · 118, 109029</div>
+          <h3 class="publication-title">Amorphous bimetallic polysulfide for all-solid-state batteries with superior capacity and low-temperature tolerance</h3>
+          <p class="publication-authors"><strong>Pushun Lu</strong>, Sheng Gong, Fuliang Guo, Xiang Zhu, Yuli Huang, Yue Wang, Weitao He, Ming Yang, Liquan Chen, Hong Li, Fan Wu*.</p>
+          <p class="publication-links"><a href="https://doi.org/10.1016/j.nanoen.2023.109029" target="_blank" rel="noopener">原文链接：DOI: 10.1016/j.nanoen.2023.109029</a></p>
+        </div>
+        <!-- 图片替换：assets/images/publications/pub-10.jpg -->
+        <button class="zoom-button" type="button" data-enlarge aria-label="放大查看论文配图 10">
+          <img class="publication-image" src="./assets/images/publications/pub-10.jpg" alt="论文图文摘要 10">
+        </button>
+      </article>
+
+      <!-- ==================== 2022 ==================== -->
+      <h2 class="publication-year">2022</h2>
+      <article class="publication-item">
+        <div>
+          <div class="publication-meta">Electrochemical Energy Reviews · 2022 · 5, 3（封面论文）</div>
+          <h3 class="publication-title">Air stability of solid-state sulfide batteries and electrolytes</h3>
+          <p class="publication-authors"><strong>Pushun Lu#</strong>, Dengxu Wu#, Liquan Chen, Hong Li*, Fan Wu*.</p>
+          <p class="publication-links"><a href="https://doi.org/10.1007/s41918-022-00149-3" target="_blank" rel="noopener">原文链接：DOI: 10.1007/s41918-022-00149-3</a></p>
+        </div>
+        <!-- 图片替换：assets/images/publications/pub-11.jpg -->
+        <button class="zoom-button" type="button" data-enlarge aria-label="放大查看论文配图 11">
+          <img class="publication-image" src="./assets/images/publications/pub-11.jpg" alt="论文图文摘要 11">
+        </button>
+      </article>
+
+      <!-- ==================== 2021 ==================== -->
+      <h2 class="publication-year">2021</h2>
+      <article class="publication-item">
+        <div>
+          <div class="publication-meta">Advanced Materials · 2021 · 33(32): 2100921</div>
+          <h3 class="publication-title">Superior all-solid-state batteries enabled by a gas-phase-synthesized sulfide electrolyte with ultrahigh moisture stability and ionic conductivity</h3>
+          <p class="publication-authors"><strong>Pushun Lu</strong>, Lilu Liu, Shuo Wang, Jieru Xu, Jian Peng, Wenlin Yan, Qiuchen Wang, Hong Li, Liquan Chen, Fan Wu*.</p>
+          <p class="publication-links"><a href="https://doi.org/10.1002/adma.202100921" target="_blank" rel="noopener">原文链接：DOI: 10.1002/adma.202100921</a></p>
+        </div>
+        <!-- 图片替换：assets/images/publications/pub-12.jpg -->
+        <button class="zoom-button" type="button" data-enlarge aria-label="放大查看论文配图 12">
+          <img class="publication-image" src="./assets/images/publications/pub-12.jpg" alt="论文图文摘要 12">
+        </button>
+      </article>
+    </section>
+
+    <!-- ==================== 分页：每页最多 10 篇，超出部分在这里翻页 ==================== -->
+    <nav class="pagination" aria-label="论文分页" hidden>
+      <button class="page-btn" type="button" data-page-prev>← 上一页</button>
+      <span class="page-status" data-page-status></span>
+      <button class="page-btn" type="button" data-page-next>下一页 →</button>
+      <!-- 跳转到指定页：输入页码后按回车或点“跳转” -->
+      <span class="page-jump">
+        跳转到
+        <input class="page-input" type="number" min="1" value="1" step="1" data-page-input aria-label="跳转到第几页">
+        页
+        <button class="page-btn page-btn-go" type="button" data-page-go>跳转</button>
+      </span>
+    </nav>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <!-- 文字替换：单位、地址、联系方式 -->
+      © <span data-current-year></span> Research Group Name. All rights reserved. · 地址/邮箱可在此处填写
+    </div>
+  </footer>
+  <script src="./assets/js/main.js"></script>
+</body>
+</html>
